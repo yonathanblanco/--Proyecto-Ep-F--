@@ -59,7 +59,7 @@ const handleRoleChange = (event) => {
               <div class="form-group">
                 <label for="rol" class="form-label"></label>
                 <select id="rol" v-model="role" @change="handleRoleChange" class="input-field">
-                  <option value="">SELECCIONE UN ROL</option>
+                  <option value="">SELECCIONE UN rol</option>
                   <option value="administrador">Administrador</option>
                   <option value="consultor">Consultor</option>
                   <option value="instructor">Instructor</option>
