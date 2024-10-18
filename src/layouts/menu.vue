@@ -14,7 +14,7 @@
         <!-- Agrega q-space para empujar el botón de logout a la derecha -->
         <q-space />
 
-        <q-btn dense flat round icon="logout" @click="exit()" />
+        <q-btn dense flat round icon="logout" @click="exit" />
       </q-toolbar>
     </q-header>
 
@@ -67,22 +67,25 @@
   </q-layout>
 </template>
 
-
 <script setup>
-import { ref, onBeforeMount } from "vue";
-import { QIcon } from "quasar";
+import { ref } from "vue";
+import { useRouter } from 'vue-router';
 import iconSena from '../assets/icon.png';
 import buttonsMenu from '../components/buttons/buttonsMenu.vue';
 
 const leftDrawerOpen = ref(false);
+const router = useRouter();
 
 function toggleLeftDrawer() {
   leftDrawerOpen.value = !leftDrawerOpen.value;
 }
 
-
+function exit() {
+  // Aquí puedes agregar la lógica para cerrar sesión, por ejemplo, eliminar el token de autenticación
+  localStorage.removeItem('authToken'); // Ejemplo de eliminación de token
+  router.push('/'); // Redirigir a la página de login
+}
 </script>
-
 
 <style scoped>
 * {
@@ -92,8 +95,6 @@ function toggleLeftDrawer() {
 .bodyMenu {
   padding-top: 20px;
 }
-
-
 
 /* img */
 .imgSena {
@@ -121,7 +122,6 @@ function toggleLeftDrawer() {
   background-color: #ddfadbd0; /* Cambia este color según tus necesidades */
   color: rgb(0, 0, 0); /* Color del texto en el footer */
 }
-
 
 .titlesHeader {
   font-size: 1.5em;
