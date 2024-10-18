@@ -1,5 +1,5 @@
 // /services/apiClient.js
-import apiClient from '@/plugins/axios'; // Importa tu instancia de Axios si está configurada en /plugins
+import apiClient from './../plugins/axios.js'; // Importa tu instancia de Axios si está configurada en /plugins
 
 // Función GET
 export async function getData(url, params = {}) {
