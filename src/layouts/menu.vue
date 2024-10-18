@@ -81,8 +81,6 @@ function toggleLeftDrawer() {
 }
 
 function exit() {
-  // Aquí puedes agregar la lógica para cerrar sesión, por ejemplo, eliminar el token de autenticación
-  localStorage.removeItem('authToken'); // Ejemplo de eliminación de token
   router.push('/'); // Redirigir a la página de login
 }
 </script>

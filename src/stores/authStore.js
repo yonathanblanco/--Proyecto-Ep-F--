@@ -6,12 +6,15 @@ export const useAuthStore = defineStore("auth",()=>{
     let token = ref("")
     let user = ref(null)
 
-    function setToken(token){
-        if(token){
-            token.value=token
+    function setToken(newToken){
+        token.value=newToken
+        if(newToken!=""){
+            token.value=newToken
+            console.log(token);
+            
         }else{
             console.log("No esta llegando el token ", token);
-        }
+        } 
     }
 
     function getToken(){
@@ -19,6 +22,8 @@ export const useAuthStore = defineStore("auth",()=>{
     }
 
     return{
-        setToken, getToken, api
+        setToken, getToken, token
     }
-})
+},
+{persist:true}
+)
