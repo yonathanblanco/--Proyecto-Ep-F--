@@ -7,19 +7,31 @@
             <!-- Sección del logo y el título Login -->
             <q-card-section class="headerLogin text-center">
               <img :src="logosena" alt="Logo SENA" class="imgSena">
-              <q-typography tag="h2" class="q-mt-md login-title">Login</q-typography>
+              <q-typography tag="h2" class="q-mt-md login-title">Etapas Productivas</q-typography>
             </q-card-section>
 
             <!-- Selección de Rol -->
             <q-card-section>
               <div class="form-group">
-                <label for="rol" class="form-label"></label>
-                <select id="rol" v-model="role" @change="handleRoleChange" class="input-field">
-                  <option value="">SELECCIONE UN rol</option>
-                  <option value="ETAPA PRODUCTIVA">Administrador</option>
-                  <option value="instructor">Instructor</option>
-                  <option value="consultor">Consultor</option>
-                </select>
+                <label for="rol" class="form-label">Seleccione un rol</label>
+                <q-select
+                  id="rol"
+                  v-model="role"
+                  @change="handleRoleChange"
+                  class="input-field"
+                  :options="rolesOptions"
+                  emit-value
+                  map-options
+                  outlined
+                  dense
+                  label="Seleccione un rol"
+                  use-input
+                  input-debounce="300"
+                >
+                  <template v-slot:prepend>
+                    <q-icon name="list" color="green-8" />
+                  </template>
+                </q-select>
               </div>
 
               <!-- Mostrar Email y Contraseña solo si es administrador o instructor -->
@@ -34,6 +46,9 @@
                 :error="!!emailError" 
                 :error-message="emailError" 
                 label="Email">
+                <template v-slot:prepend>
+                  <q-icon name="mail" color="green-8" />
+                </template>
               </q-input>
 
               <q-input 
@@ -48,6 +63,9 @@
                 :error="!!passwordError" 
                 :error-message="passwordError" 
                 label="Password">
+                <template v-slot:prepend>
+                  <q-icon name="lock" color="green-8" />
+                </template>
                 <template v-slot:append>
                   <q-icon :name="passwordVisible ? 'visibility' : 'visibility_off'"
                           class="cursor-pointer" 
@@ -65,6 +83,9 @@
                 class="q-mt-md input" 
                 v-model="documento"
                 label="Documento">
+                <template v-slot:prepend>
+                  <q-icon name="assignment" color="green-8" />
+                </template>
               </q-input>
 
               <q-input 
@@ -78,6 +99,9 @@
                 :error="!!emailError" 
                 :error-message="emailError" 
                 label="Email">
+                <template v-slot:prepend>
+                  <q-icon name="mail" color="green-8" />
+                </template>
               </q-input>
             </q-card-section>
 
@@ -118,11 +142,13 @@
 <script setup>
 import { ref } from "vue";
 import { postData } from "../services/apiClient.js";
+import { postRepforaData } from "../services/apiRepfora.js";
 import { notifySuccessRequest, notifyErrorRequest } from "../utils/notify.js";
 import { validarCampos } from "../utils/validateFields.js";
 import { useRouter } from 'vue-router';
+import { useAuthStore } from '../stores/authStore.js';
 
-
+const useAuth = useAuthStore()
 const $router = useRouter();
 
 const email = ref("");
@@ -133,18 +159,31 @@ let passwordVisible = ref(false);
 
 const isRole = (roles) => role.value === roles;
 
+
+const rolesOptions = ref([
+  { value: 'ETAPA PRODUCTIVA', label: 'Administrador' },
+  { value: 'instructor', label: 'Instructor' },
+  { value: 'consultor', label: 'Consultor' },
+]);
+
+
 async function loginAdmin(email, password, role) {
   if (!validarCampos(email, password)) {
     return;  
   }
   
   try {
-    const res = await postData("repfora/Login", { email, password, role });
+    const res = await postData("http://89.116.49.65:4500/api/users/login", { email, password, role });
+    console.log(res.token);
+    useAuth.setToken(res.token)
     notifySuccessRequest("Inicio de sesión exitoso");
     $router.push("/home");
   } catch (error) {
     notifyErrorRequest("Contraseña/Email incorrecto");
   }
+
+  console.log(useAuth.token);
+  
 }
 
 
@@ -153,12 +192,12 @@ async function loginInstructor(email, password) {
     return;  
   }
   try {
-    const res = await postRepforaData("instructors/login", { email, password });
+    const res = await postRepforaData("/instructors/login", { email, password });
     notifySuccessRequest("Inicio de sesión exitoso");
     $router.push("/home");
   } catch (error) {
     notifyErrorRequest("Contraseña/Email incorrecto");
-  }
+  } 
 }
 
 
@@ -195,20 +234,23 @@ async function handleLogin() {
 
 .headerLogin {
   display: flex;
-  flex-direction: column; /* Cambiar a columna para colocar el texto Login debajo */
+  flex-direction: column;
   align-items: center;
   justify-content: center;
   position: relative;
+  background-color: #2e7d32;
+  padding: 10px 20px; /* Reducir la altura de la barra verde */
+  border-radius: 10px 10px 0 0;
 }
 
 .imgSena {
-  max-width: 100px;
-  margin: 10px 0;
+  max-width: 100px; /* Hacer el logo más grande */
+  margin-bottom: 10px;
 }
 
 .login-title {
-  font-family: 'Poppins', sans-serif; /* Fuente personalizada */
-  color: #38803a; /* Color verde para combinar con el tema */
+  font-family: 'Poppins', sans-serif;
+  color: white;
   font-weight: bold;
   font-size: 1.8rem;
 }
@@ -219,7 +261,7 @@ async function handleLogin() {
   background-color: white;
   transition: all 0.4s ease;
   box-shadow: 0 15px 25px rgba(0, 0, 0, 0.1);
-  border: 1px solid #38803a; /* Añadir borde verde */
+  border: 1px solid #2e7d32;
 }
 
 .my_card:hover {
@@ -228,20 +270,20 @@ async function handleLogin() {
 }
 
 .input {
-  margin-bottom: 12px; /* Ajustamos el espacio entre los inputs */
+  margin-bottom: 12px;
 }
 
 .q-mt-md {
-  margin-top: 16px; /* Ajustamos el margen superior para bajar el campo de email */
+  margin-top: 16px;
 }
 
 .q-mt-xs {
-  margin-top: 4px; /* Ajustamos el margen superior para subir el campo de password */
+  margin-top: 4px;
 }
 
 .input:focus {
-  border-color: #38803a;
-  box-shadow: 0 0 2px #38803a;
+  border-color: #2e7d32;
+  box-shadow: 0 0 2px #2e7d32;
 }
 
 .cursor-pointer {
@@ -250,31 +292,31 @@ async function handleLogin() {
 }
 
 .cursor-pointer:hover {
-  color: #38803a;
+  color: #2e7d32;
 }
 
 .forgot-password {
   font-size: 0.9rem;
   font-weight: bold;
-  color: #38803a;
+  color: #2e7d32;
   transition: 0.3s;
 }
 
 .forgot-password:hover {
-  color: #38803a;
+  color: #2e7d32;
 }
 
 .btn-login {
-  background: linear-gradient(45deg, #38803a, #38803a);
+  background: linear-gradient(45deg, #2e7d32, #2e7d32);
   color: white;
   font-weight: bold;
   transition: background 0.3s ease;
 }
 
 .btn-login:hover {
-  background: linear-gradient(45deg, #38803a, #38803a);
+  background: linear-gradient(45deg, #1b5e20, #1b5e20);
   transform: translateY(-3px);
-  box-shadow: 0 10px 20px rgba(67, 160, 71, 0.4);
+  box-shadow: 0 10px 20px rgba(46, 125, 50, 0.4);
 }
 
 .form-group {
@@ -296,16 +338,15 @@ async function handleLogin() {
 }
 
 .input-field:focus {
-  border-color: #38803a; /* Cambiar borde a color verde */
+  border-color: #2e7d32;
 }
 
-/* Tittles and texts */
 .tittleFooter {
   font-size: 16px;
-  
 }
+
 .footer-custom {
-  background-color: #b0b0b0d8; /* Cambia este color según tus necesidades */
-  color: rgb(0, 0, 0); /* Color del texto en el footer */
+  background-color: #b0b0b0d8;
+  color: rgb(0, 0, 0);
 }
 </style>

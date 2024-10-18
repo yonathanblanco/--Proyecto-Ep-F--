@@ -1,6 +1,7 @@
 <script setup>
 import Table from "../components/tables/table.vue";
 import ButtonOpenModal from "../components/buttons/buttonOpenModal.vue";
+import Title from '../components/tittle/tittle.vue'
 import { ref, onMounted } from "vue";
 import { getData } from "../services/apiClient.js";
 
@@ -24,8 +25,8 @@ const columns = ref([
 ]);
 
 async function getApprentices(){
-  let res = await getData("Apprentice/listallapprentice")
-  rows.value = res.apprentices
+  let res = await getData("apprentice/listallapprentice")
+  rows.value = res
   console.log(res);
   
 }
@@ -41,7 +42,14 @@ function openDialog(row) {
 </script>
 
 <template>
+
+<Title title="APRENDICES" />
+
+  <div>
+    <ButtonOpenModal titles="CREAR" icon="add" />
+  </div>
   <div style="display: flex; justify-content: center; padding: 10px">
+  
     <Table
       :rows="rows"
       :columns="columns"
@@ -68,7 +76,5 @@ function openDialog(row) {
     </q-dialog>
   </div>
 
-  <div>
-    <ButtonOpenModal titles="CREAR" icon="add" />
-  </div>
+  
 </template>
