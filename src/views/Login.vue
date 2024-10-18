@@ -1,47 +1,3 @@
-<script setup>
-import { ref, computed } from "vue";
-import logosena from '../assets/img/logosena.png';
-
-// Variables para los campos
-const email = ref('');
-const password = ref('');
-const role = ref('');
-const emailError = ref('');
-const passwordError = ref('');
-const passwordVisible = ref(false);
-const documento = ref('');
-
-// Función de login
-const login = () => {
-  if (role.value === 'administrador' || role.value === 'instructor') {
-    // Lógica para administrador e instructor
-  } else if (role.value === 'consultor') {
-    // Lógica para consultor
-  } else {
-    // Manejar error de rol no seleccionado
-  }
-};
-
-// Función para olvidarse de la contraseña
-const forgotPassword = () => {
-  // Lógica para olvidar contraseña
-};
-
-// Computed para verificar el rol seleccionado
-const showEmailPassword = computed(() => {
-  return role.value === 'administrador' || role.value === 'instructor';
-});
-
-const showDocumentoEmail = computed(() => {
-  return role.value === 'consultor';
-});
-
-// Manejar cambio de rol
-const handleRoleChange = (event) => {
-  role.value = event.target.value.toLowerCase();
-};
-</script>
-
 <template>
   <div class="login-container">
     <q-layout view="lHh Lpr lFf">
@@ -60,15 +16,15 @@ const handleRoleChange = (event) => {
                 <label for="rol" class="form-label"></label>
                 <select id="rol" v-model="role" @change="handleRoleChange" class="input-field">
                   <option value="">SELECCIONE UN rol</option>
-                  <option value="administrador">Administrador</option>
-                  <option value="consultor">Consultor</option>
+                  <option value="ETAPA PRODUCTIVA">Administrador</option>
                   <option value="instructor">Instructor</option>
+                  <option value="consultor">Consultor</option>
                 </select>
               </div>
 
               <!-- Mostrar Email y Contraseña solo si es administrador o instructor -->
               <q-input 
-                v-if="showEmailPassword"
+                v-if="isRole('ETAPA PRODUCTIVA') || isRole('instructor')"
                 dense 
                 label-color="green-7" 
                 color="#38803a" 
@@ -81,7 +37,7 @@ const handleRoleChange = (event) => {
               </q-input>
 
               <q-input 
-                v-if="showEmailPassword"
+                v-if="isRole('ETAPA PRODUCTIVA') || isRole('instructor')"
                 dense 
                 label-color="green-7" 
                 color="#38803a" 
@@ -101,7 +57,7 @@ const handleRoleChange = (event) => {
 
               <!-- Mostrar Documento y Email solo si es consultor -->
               <q-input 
-                v-if="showDocumentoEmail"
+                v-if="isRole('consultor')"
                 dense 
                 label-color="green-7" 
                 color="#38803a" 
@@ -112,7 +68,7 @@ const handleRoleChange = (event) => {
               </q-input>
 
               <q-input 
-                v-if="showDocumentoEmail"
+                v-if="isRole('consultor')"
                 dense 
                 label-color="green-7" 
                 color="#38803a" 
@@ -140,7 +96,7 @@ const handleRoleChange = (event) => {
                 label="Iniciar Sesión" 
                 no-caps 
                 class="full-width btn-login" 
-                @click="login()"
+                @click="handleLogin"
                 required>
               </q-btn>
             </q-card-section>
@@ -158,6 +114,79 @@ const handleRoleChange = (event) => {
     </q-layout>
   </div>
 </template>
+
+<script setup>
+import { ref } from "vue";
+import { postData } from "../services/apiClient.js";
+import { notifySuccessRequest, notifyErrorRequest } from "../utils/notify.js";
+import { validarCampos } from "../utils/validateFields.js";
+import { useRouter } from 'vue-router';
+
+
+const $router = useRouter();
+
+const email = ref("");
+const password = ref("");
+const documento = ref("");
+const role = ref("");
+let passwordVisible = ref(false);
+
+const isRole = (roles) => role.value === roles;
+
+async function loginAdmin(email, password, role) {
+  if (!validarCampos(email, password)) {
+    return;  
+  }
+  
+  try {
+    const res = await postData("repfora/Login", { email, password, role });
+    notifySuccessRequest("Inicio de sesión exitoso");
+    $router.push("/home");
+  } catch (error) {
+    notifyErrorRequest("Contraseña/Email incorrecto");
+  }
+}
+
+
+async function loginInstructor(email, password) {
+  if (!validarCampos(email, password)) {
+    return;  
+  }
+  try {
+    const res = await postRepforaData("instructors/login", { email, password });
+    notifySuccessRequest("Inicio de sesión exitoso");
+    $router.push("/home");
+  } catch (error) {
+    notifyErrorRequest("Contraseña/Email incorrecto");
+  }
+}
+
+
+async function loginConsultor(email, documento) {
+  if (!validarCampos(email, '', documento)) {
+    return; 
+  }
+
+  try {
+    const res = await postRepforaData("aprendiz/login", { email, documento });
+    notifySuccessRequest("Inicio de sesión exitoso");
+    $router.push("/home");
+  } catch (error) {
+    notifyErrorRequest("Documento/Email incorrecto");
+  }
+}
+
+
+async function handleLogin() {
+  if (isRole('ETAPA PRODUCTIVA')) {
+    await loginAdmin(email.value, password.value, role.value);
+  } else if (isRole('instructor')) {
+    await loginInstructor(email.value, password.value);
+  } else if (isRole('consultor')) {
+    await loginConsultor(email.value, documento.value);
+  }
+}
+</script>
 
 <style scoped>
 .bg-login {
