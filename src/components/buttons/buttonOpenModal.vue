@@ -40,7 +40,7 @@
   const modalTitle = ref('');
   
   const openModal = () => {
-    modalTitle.value = props.titles; // Usar el título del botón
+    modalTitle.value = props.titles;
     dialog.value = true;
   };
   

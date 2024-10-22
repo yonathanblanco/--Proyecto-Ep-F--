@@ -1,6 +1,6 @@
 <template>
     <div style="width:90%">
-      <q-table :title="title" :rows="rows" :columns="columns" flat bordered class="styled-table">
+      <q-table :rows="rows" :columns="columns" flat bordered class="styled-table">
         <!-- Celda de edición -->
         <template v-slot:body-cell-editar="props">
           <q-td :props="props" class="q-pa-sm">
@@ -35,10 +35,6 @@
     },
     columns: {
       type: Array,
-      required: true
-    },
-    title: {
-      type: String,
       required: true
     },
     onClickEdit: {
