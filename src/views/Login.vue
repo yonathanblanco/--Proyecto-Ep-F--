@@ -176,16 +176,15 @@ async function loginAdmin(email, password, role) {
   try {
     const res = await postData("http://89.116.49.65:4500/api/users/login", { email, password, role });
     console.log(res.token);
-    useAuth.setToken(res.token)
+    useAuth.setToken(res.token);  // Guardar token en Pinia
+    localStorage.setItem('auth', JSON.stringify({ token: res.token }));  // Guardar token en localStorage
     notifySuccessRequest("Inicio de sesión exitoso");
     $router.push("/home");
   } catch (error) {
     notifyErrorRequest("Contraseña/Email incorrecto");
   }
-
-  console.log(useAuth.token);
-  
 }
+
 
 
 async function loginInstructor(email, password) {
@@ -194,6 +193,8 @@ async function loginInstructor(email, password) {
   }
   try {
     const res = await postRepforaData("/instructors/login", { email, password });
+    useAuth.setToken(res.token);  // Guardar token en Pinia
+    localStorage.setItem('auth', JSON.stringify({ token: res.token }));  // Guardar token en localStorage
     notifySuccessRequest("Inicio de sesión exitoso");
     $router.push("/home");
   } catch (error) {

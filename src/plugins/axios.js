@@ -1,19 +1,21 @@
 import axios from 'axios';
 
-const token = JSON.parse(localStorage.getItem('auth')) ;
+// Aquí controlamos que no sea null antes de acceder a token.token
+const storedAuth = localStorage.getItem('auth');
+const token = storedAuth ? JSON.parse(storedAuth) : null;
 
 const apiClient = axios.create({
     baseURL: 'http://localhost:4100/api',
-    //baseURL: 'http://89.116.49.65:4500/api',
     headers: {
-        "token": token.token 
+        "token": token ? token.token : ''  // Verificamos si el token existe
     }
 });
 
 apiClient.interceptors.request.use((config) => {
-    const token = localStorage.getItem('token'); 
+    const storedAuth = localStorage.getItem('auth');
+    const token = storedAuth ? JSON.parse(storedAuth) : null;
     if (token) {
-        config.headers['token'] = token; 
+        config.headers['token'] = token.token;  // Usamos token.token si está disponible
     }
     return config;
 }, (error) => {
