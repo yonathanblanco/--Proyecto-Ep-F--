@@ -72,6 +72,8 @@ import { ref } from "vue";
 import { useRouter } from 'vue-router';
 import iconSena from '../assets/icon.png';
 import buttonsMenu from '../components/buttons/buttonsMenu.vue';
+import { useAuthStore } from '../stores/authStore'; 
+
 
 const leftDrawerOpen = ref(false);
 const router = useRouter();
@@ -80,7 +82,11 @@ function toggleLeftDrawer() {
   leftDrawerOpen.value = !leftDrawerOpen.value;
 }
 
+const authStore = useAuthStore();
+
+
 function exit() {
+  authStore.setToken("");
   router.push('/'); 
 }
 </script>
