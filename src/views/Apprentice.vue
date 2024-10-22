@@ -7,11 +7,11 @@ import { getData } from "../services/apiClient.js";
 
 const rows = ref([]);
 
-let title = ref("APRENDICES");
+
 let alert = ref(false);
 
 const columns = ref([
-  { name: "fiche", label: "Ficha", field: "fiche", align: "center" },
+  { name: "fiche", label: "Ficha", field: "fiche", align: "center", field: (row) => row.fiche.name },
   { name: "tpdocument", label: "Tipo Documento", align: "center", field: "tpdocument", sortable: true },
   { name: "numdocument", align: "center", label: "Número Documento", field: "numdocument", sortable: true },
   { name: "firstname", label: "Nombre", align: "center", field: "firstname", sortable: true },
@@ -19,7 +19,7 @@ const columns = ref([
   { name: "phone", label: "Teléfono", align: "center", field: "phone", sortable: true },
   { name: "email", label: "Correo Electrónico", align: "center", field: "email", sortable: true },
   { name: "modality", label: "Modalidad", align: "center", field: "modality", sortable: true },
-  { name: "estado", label: "Estado", align: "center", field: "estado", sortable: true },
+  { name: "status", label: "Estado", align: "center", field: "status", sortable: true },
   { name: "editar", label: "Editar", align: "center", field: "editar" },
   { name: "activar", label: "Activar/Desactivar", align: "center", field: "activar" },
 ]);
@@ -43,7 +43,7 @@ function openDialog(row) {
 
 <template>
 
-<Title title="APRENDICES" />
+<Title title="APRENDICES"/>
 
   <div>
     <ButtonOpenModal titles="CREAR" icon="add" />
@@ -53,7 +53,6 @@ function openDialog(row) {
     <Table
       :rows="rows"
       :columns="columns"
-      :title="title"
       :onClickEdit="openDialog"
     />
     <q-dialog v-model="alert">
@@ -66,7 +65,7 @@ function openDialog(row) {
           Lorem ipsum dolor sit amet consectetur adipisicing elit. Rerum
           repellendus sit voluptate voluptas eveniet porro. Rerum blanditiis
           perferendis totam, ea at omnis vel numquam exercitationem aut, natus
-          minima, porro labore.
+          minima, porro la
         </q-card-section>
 
         <q-card-actions align="right">

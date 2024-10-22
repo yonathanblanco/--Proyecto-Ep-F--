@@ -147,6 +147,7 @@ import { notifySuccessRequest, notifyErrorRequest } from "../utils/notify.js";
 import { validarCampos } from "../utils/validateFields.js";
 import { useRouter } from 'vue-router';
 import { useAuthStore } from '../stores/authStore.js';
+import logosena from "../assets/img/logosena.png"
 
 const useAuth = useAuthStore()
 const $router = useRouter();
@@ -239,12 +240,12 @@ async function handleLogin() {
   justify-content: center;
   position: relative;
   background-color: #2e7d32;
-  padding: 10px 20px; /* Reducir la altura de la barra verde */
+  padding: 10px 20px; 
   border-radius: 10px 10px 0 0;
 }
 
 .imgSena {
-  max-width: 100px; /* Hacer el logo más grande */
+  max-width: 200px; 
   margin-bottom: 10px;
 }
 

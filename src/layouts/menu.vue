@@ -81,7 +81,7 @@ function toggleLeftDrawer() {
 }
 
 function exit() {
-  router.push('/'); // Redirigir a la página de login
+  router.push('/'); 
 }
 </script>
 
