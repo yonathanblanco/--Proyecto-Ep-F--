@@ -8,6 +8,6 @@
   </template>
   
   <script setup>
-  import ButtonOpenModal from '../components/buttons/buttonOpenModal.vue';
+  import ButtonOpenModal from '../components/buttons/buttonAdd.vue';
   </script>
   
