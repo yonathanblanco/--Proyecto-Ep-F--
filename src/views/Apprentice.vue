@@ -65,7 +65,7 @@ function openDialog(row) {
           Lorem ipsum dolor sit amet consectetur adipisicing elit. Rerum
           repellendus sit voluptate voluptas eveniet porro. Rerum blanditiis
           perferendis totam, ea at omnis vel numquam exercitationem aut, natus
-          minima, porro labore.
+          minima, porro la
         </q-card-section>
 
         <q-card-actions align="right">
