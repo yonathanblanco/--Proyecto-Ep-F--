@@ -5,7 +5,8 @@ import { getData, putData } from "../services/apiClient";
 import Table from "../components/tables/tablestatus.vue";
 import buttonAdd from "../components/buttons/buttonAdd.vue";
 import Title from "../components/tittle/tittle.vue";
-import Modal from "../components/modal/modal.vue"
+import Modal from "../components/modal/modal.vue";
+import ButtonBack from '../components/buttons/buttonBack.vue';
 
 
 
@@ -58,11 +59,19 @@ const columns = ref([
     sortable: true,
   },
   {
-    name: "email",
+    name: "personalEmail",
     required: true,
     align: "center",
-    label: "Email",
-    field: "email",
+    label: "Email Personal",
+    field: "personalEmail",
+    sortable: true,
+  },
+  {
+    name: " institucionalEmail",
+    required: true,
+    align: "center",
+    label: "Email Institucional",
+    field: " institucionalEmail",
     sortable: true,
   },
   {
@@ -77,21 +86,6 @@ const columns = ref([
     align: "center",
     label: "Num. Ficha",
     field: (row) => row.fiche?.number || "",
-    sortable: true,
-  },
-
-  {
-    name: "createdAt",
-    align: "center",
-    label: "Creación",
-    field: "createdAt",
-    sortable: true,
-  },
-  {
-    name: "updatedAt",
-    align: "center",
-    label: "Actualización",
-    field: "updatedAt",
     sortable: true,
   },
   {
@@ -112,6 +106,9 @@ const columns = ref([
 const rows = ref([]);
 
 async function getApprentices() {
+  const storedAuth = localStorage.getItem('auth');
+const token = storedAuth ? JSON.parse(storedAuth) : null;
+console.log(token.token);
   const res = await getData("apprentice/listallapprentice");
   rows.value = res;
   console.log(res);
@@ -143,13 +140,16 @@ async function deactivate(id) {
 <template>
   <div class="q-gutter-md divMain">
     <div>
+      <ButtonBack />
       <Title title="APRENDICES" />
+      <div>
+        <buttonAdd :openAddModal="openAddModal" />
+      </div>
+
+      
     </div>
 
-    <div>
-      <buttonAdd :openAddModal="openAddModal" />
-    </div>
-
+    
     <div>
       <Table
         :rows="rows"
@@ -231,7 +231,7 @@ async function deactivate(id) {
         <q-input
           filled
           v-model="email"
-          label="Email"
+          label="Email Personal"
           class="input thin-input"
           label-color="green-9"
         >
@@ -242,8 +242,20 @@ async function deactivate(id) {
 
         <q-input
           filled
-          v-model="ficheName"
-          label="Nombre de Ficha"
+          v-model="emailInstitucional"
+          label="Email Institucional"
+          class="input thin-input"
+          label-color="green-9"
+        >
+          <template v-slot:prepend>
+            <q-icon color="green-10" name="email" />
+          </template>
+        </q-input>
+
+        <q-input
+          filled
+          v-model="modality"
+          label="Modalidad Epata Productiva"
           class="input thin-input"
           label-color="green-9"
         >
@@ -254,8 +266,8 @@ async function deactivate(id) {
 
         <q-input
           filled
-          v-model="ficheNumber"
-          label="Num. Ficha"
+          v-model="fiche"
+          label="Ficha"
           class="input thin-input"
           label-color="green-9"
         >

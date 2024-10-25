@@ -35,5 +35,6 @@ const props = defineProps({
     margin-top: 28px;
     display: flex;
     justify-content: flex-end;
+    margin-right: 50px;
 }
 </style>

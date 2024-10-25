@@ -17,6 +17,7 @@ export const routes = [
         path: '/menu', component: Menu, children: [
             { path: '/home', component: Home },
             { path: '/apprentice', component: Apprentice },
+            // { path: '/fiches', component: Fiches },
             { path: '/assignment', component: Assignment },
             { path: '/binnacle', component: Binnacle },
             { path: '/followup', component: Followup },
