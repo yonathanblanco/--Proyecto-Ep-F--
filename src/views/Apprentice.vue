@@ -2,14 +2,11 @@
 import Table from "../components/tables/tableStatus.vue";
 import buttonAdd from "../components/buttons/buttonAdd.vue";
 import Title from "../components/tittle/tittle.vue";
-import Modal from "../components/modal/modal.vue"
 import { ref, onMounted } from "vue";
 import { getData } from "../services/apiClient.js";
-import { format, useQuasar } from "quasar";
 
 const fixed = ref(false);
 const isEditing = ref(false);
-const $q = useQuasar();
 
 const rows = ref([]);
 

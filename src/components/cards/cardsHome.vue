@@ -2,8 +2,9 @@
     <div class="col-xs-12 col-sm-6 col-md-3">
         <q-card class="cards" flat bordered>
             <q-img class="img" :src="imageSRC" />
+            <div class="divider"></div> <!-- Línea gris -->
             <q-card-section class="section">
-                <q-card-titles class="tittles">{{ titles }}</q-card-titles>
+                <q-card-title class="titles">{{ titles }}</q-card-title>
             </q-card-section>
             <q-card-actions class="buttons-background">
                 <q-btn flat color="white" class="buttons" :to="to">
@@ -57,7 +58,7 @@ const props = defineProps({
     width: 450px;
 }
 
-.tittles {
+.titles {
     font-size: 1.2rem;
     font-weight: bold;
     text-align: center;
@@ -85,5 +86,11 @@ const props = defineProps({
     height: 200px;
     object-fit: cover;
     border-radius: 15px 15px 0 0;
+}
+
+.divider {
+    height: 3px;
+    background-color: #76b879; /* Línea gris sutil */
+    margin: 0 10px;
 }
 </style>
