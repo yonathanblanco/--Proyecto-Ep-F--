@@ -25,10 +25,10 @@ import assignmentImage from '../assets/img/modalidadImage.png';
             <CardComponent titles="BITACORAS" :imageSRC="binnacleImage" to="/binnacle" />
         </div>
 
-        <!-- <div>
-            <CardComponent titles="FICHAS" :imageSRC="binnacleImage" to="/binnacle" />
+        <div>
+            <CardComponent titles="FICHAS" :imageSRC="binnacleImage" to="/fiches" />
         </div>
-         -->
+        
         <div>
             <CardComponent titles="MODALIDADES" :imageSRC="modalityImage" to="/modality" />
         </div>
@@ -39,6 +39,10 @@ import assignmentImage from '../assets/img/modalidadImage.png';
 
         <div>
             <CardComponent titles="ASIGNACIONES" :imageSRC="assignmentImage" to="/assignment" />
+        </div>
+
+        <div>
+            <CardComponent titles="INFORMES" :imageSRC="assignmentImage" to="/report" />
         </div>
     </div>
 </template>

@@ -36,7 +36,7 @@
 
               <!-- Mostrar Email y Contraseña solo si es administrador o instructor -->
               <q-input 
-                v-if="isRole('ETAPA PRODUCTIVA') || isRole('instructor')"
+                v-if="isRole('ETAPA PRODUCTIVA') || isRole('Instructor')"
                 dense 
                 label-color="green-7" 
                 color="#38803a" 
@@ -52,7 +52,7 @@
               </q-input>
 
               <q-input 
-                v-if="isRole('ETAPA PRODUCTIVA') || isRole('instructor')"
+                v-if="isRole('ETAPA PRODUCTIVA') || isRole('Instructor')"
                 dense 
                 label-color="green-7" 
                 color="#38803a" 
@@ -163,7 +163,7 @@ const isRole = (roles) => role.value === roles;
 
 const rolesOptions = ref([
   { value: 'ETAPA PRODUCTIVA', label: 'Administrador' },
-  { value: 'instructor', label: 'Instructor' },
+  { value: 'Instructor', label: 'Instructor' },
   { value: 'consultor', label: 'Consultor' },
 ]);
 
@@ -180,8 +180,8 @@ async function loginAdmin(email, password, role) {
     useAuth.setToken(res.token);  
     
     // Guarda el email y rol en Pinia
-    useAuth.setUserDetails({ email: res.email, role: res.role });
-    
+    useAuth.setUserDetails({ email: res.email, role: 'ADMINISTRADOR' });
+  
     // Almacena el token en localStorage
     localStorage.setItem('auth', JSON.stringify({ token: res.token }));
     
@@ -206,7 +206,7 @@ async function loginInstructor(email, password) {
     useAuth.setToken(res.token);  
     
     // Guarda el email y rol en Pinia
-    useAuth.setUserDetails({ email: res.email, role: 'instructor' });  // Define 'instructor' como rol
+    useAuth.setUserDetails({ email: res.email, role: 'Instructor' });  // Define 'instructor' como rol
     
     // Almacena el token en localStorage
     localStorage.setItem('auth', JSON.stringify({ token: res.token }));
@@ -239,7 +239,7 @@ async function loginConsultor(email, documento) {
 async function handleLogin() {
   if (isRole('ETAPA PRODUCTIVA')) {
     await loginAdmin(email.value, password.value, role.value);
-  } else if (isRole('instructor')) {
+  } else if (isRole('Instructor')) {
     await loginInstructor(email.value, password.value);
   } else if (isRole('consultor')) {
     await loginConsultor(email.value, documento.value);

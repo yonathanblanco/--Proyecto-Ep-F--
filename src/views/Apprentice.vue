@@ -67,11 +67,11 @@ const columns = ref([
     sortable: true,
   },
   {
-    name: " institucionalEmail",
+    name: "institucionalEmail",
     required: true,
     align: "center",
     label: "Email Institucional",
-    field: " institucionalEmail",
+    field: "institucionalEmail",
     sortable: true,
   },
   {

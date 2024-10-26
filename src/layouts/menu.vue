@@ -43,13 +43,13 @@
         <q-item-section>
           <buttonsMenu titles="INICIO" icon="list" to="/home"></buttonsMenu>
           <buttonsMenu titles="REGISTROS" icon="assignment" to="/log"></buttonsMenu>
-          <!-- <buttonsMenu titles="FICHAS" icon="list" to="/home"></buttonsMenu> -->
+          <buttonsMenu titles="FICHAS" icon="people" to="/fiches"></buttonsMenu>
           <buttonsMenu titles="APRENDICES" icon="school" to="/apprentice"></buttonsMenu>
           <buttonsMenu titles="BITÁCORAS" icon="list_alt" to="/binnacle"></buttonsMenu>
           <buttonsMenu titles="MODALIDAD" icon="info" to="/modality"></buttonsMenu>
-          <buttonsMenu titles="SEGUIMIENTOS" icon="supervisor_account" to="/followup"></buttonsMenu>
-          <buttonsMenu titles="ASIGNACIONES" icon="assignment_ind" to="/assignment"></buttonsMenu>
-          <!-- <buttonsMenu titles="INFORME" icon="assignment_ind" to="/assignment"></buttonsMenu> -->
+          <buttonsMenu titles="SEGUIMIENTOS" icon="calendar_today" to="/followup"></buttonsMenu>
+          <buttonsMenu titles="ASIGNACIONES" icon="history_edu" to="/assignment"></buttonsMenu>
+          <buttonsMenu titles="INFORME" icon="calculate" to="/report"></buttonsMenu>
         </q-item-section>
       </q-item>
     </q-drawer>
