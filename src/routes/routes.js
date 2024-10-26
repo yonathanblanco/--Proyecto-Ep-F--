@@ -8,8 +8,6 @@ import Log from '../views/Log.vue';
 import Login from '../views/Login.vue';
 import Modality from '../views/Modality.vue';
 import Register from '../views/Register.vue';
-import Fiches from '../views/Fiches.vue';
-import Report from '../views/Report.vue';
 import RessetPassword from '../views/ResetPassword.vue';
 import Menu from '../layouts/menu.vue'
 import { createRouter, createWebHashHistory } from 'vue-router';
@@ -19,12 +17,10 @@ export const routes = [
         path: '/menu', component: Menu, children: [
             { path: '/home', component: Home },
             { path: '/apprentice', component: Apprentice },
-            { path: '/fiches', component: Fiches },
             { path: '/assignment', component: Assignment },
             { path: '/binnacle', component: Binnacle },
             { path: '/followup', component: Followup },
             { path: '/modality', component: Modality },
-            { path: '/report', component: Report },
             { path: '/log', component: Log }
         ]
     },

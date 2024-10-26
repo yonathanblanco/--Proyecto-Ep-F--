@@ -47,7 +47,7 @@
           <buttonsMenu titles="APRENDICES" icon="school" to="/apprentice"></buttonsMenu>
           <buttonsMenu titles="BITÁCORAS" icon="list_alt" to="/binnacle"></buttonsMenu>
           <buttonsMenu titles="MODALIDAD" icon="info" to="/modality"></buttonsMenu>
-          <buttonsMenu titles="SEGUIMIENTOS" icon="calendar_today" to="/followup"></buttonsMenu>
+          <buttonsMenu titles="SEGUIMIENTOS" icon="supervisor_account" to="/followup"></buttonsMenu>
           <buttonsMenu titles="ASIGNACIONES" icon="history_edu" to="/assignment"></buttonsMenu>
           <buttonsMenu titles="INFORME" icon="calculate" to="/report"></buttonsMenu>
         </q-item-section>
