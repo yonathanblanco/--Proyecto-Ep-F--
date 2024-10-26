@@ -1,13 +1,11 @@
 <template>
-    <div>
-      <ButtonOpenModal 
-        titles="CREAR" 
-        icon="add" 
-      />
-    </div>
+  <div>
+      <Title title="BITACORAS" />
+  </div>  
+  
   </template>
   
   <script setup>
-  import ButtonOpenModal from '../components/buttons/buttonAdd.vue';
+  import Title from '../components/tittle/tittle.vue';
   </script>
   

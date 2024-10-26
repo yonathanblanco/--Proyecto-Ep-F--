@@ -1,6 +1,6 @@
 <template>
     <div>
-        <Title title="SEGUIMIENTOS" />
+        <Title title="INFORMES" />
     </div>  
     
     </template>
