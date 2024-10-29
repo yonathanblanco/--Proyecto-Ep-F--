@@ -2,13 +2,14 @@ import { defineStore } from "pinia";
 import { ref } from "vue";
 
 export const useAuthStore = defineStore("auth", () => {
+  // Variables reactivas para almacenar el token y detalles del usuario
   let token = ref("");
   let user = ref({
     email: "",
     role: ""
   });
 
-  // Función para establecer el token
+  // Función para establecer el token de autenticación
   function setToken(newToken) {
     token.value = newToken;
     if (newToken !== "") {
@@ -18,7 +19,7 @@ export const useAuthStore = defineStore("auth", () => {
     }
   }
 
-  // Función para obtener el token
+  // Función para obtener el token de autenticación
   function getToken() {
     return token.value;
   }
@@ -35,12 +36,40 @@ export const useAuthStore = defineStore("auth", () => {
     return user.value;
   }
 
+  // Función para limpiar los datos de autenticación
+  function clearAuthData() {
+    token.value = "";
+    user.value = { email: "", role: "" };
+    console.log("Datos de autenticación limpiados.");
+  }
+
+  function login() {
+    // Setea el token y detalles del usuario
+    setToken(response.data.token);
+    setUserDetails(response.data.user);
+  
+    // Forzar la redirección al Home
+    router.push('/home');
+  }
+
   return {
     setToken,
     getToken,
     token,
     setUserDetails,
     getUserDetails,
-    user
+    user,
+    clearAuthData,
+    login
   };
-}, { persist: true });
+}, {
+  persist: {
+    enabled: true, // Activa la persistencia
+    strategies: [
+      {
+        key: 'auth', // Clave de almacenamiento en localStorage
+        storage: localStorage, // Usa localStorage para la persistencia
+      }
+    ]
+  }
+});

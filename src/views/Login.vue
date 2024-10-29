@@ -206,7 +206,7 @@ async function loginInstructor(email, password) {
     useAuth.setToken(res.token);  
     
     // Guarda el email y rol en Pinia
-    useAuth.setUserDetails({ email: res.email, role: 'Instructor' });  // Define 'instructor' como rol
+    useAuth.setUserDetails({ email: res.email, role: 'INSTRUCTOR' });  // Define 'instructor' como rol
     
     // Almacena el token en localStorage
     localStorage.setItem('auth', JSON.stringify({ token: res.token }));
