@@ -9,10 +9,7 @@
             ETAPAS PRODUCTIVAS
           </router-link>
         </q-toolbar-title>
-
-        <!-- Espacio para empujar el botón de logout a la derecha -->
         <q-space />
-
         <q-btn dense flat round icon="logout" @click="exit" />
       </q-toolbar>
     </q-header>
@@ -26,7 +23,6 @@
             <img :src="iconSena"/>
           </q-avatar>
         </q-item>
-
         <q-item-section>
           <q-item-label>
             <div class="text-h5 text-bold">
@@ -38,18 +34,19 @@
         </q-item-section>
       </q-item>
 
-      <!-- Opciones del menú -->
+      <!-- Opciones del menú, según el rol -->
       <q-item class="bodyMenu">
         <q-item-section>
-          <buttonsMenu titles="INICIO" icon="list" to="/home"></buttonsMenu>
-          <buttonsMenu titles="REGISTROS" icon="assignment" to="/log"></buttonsMenu>
-          <buttonsMenu titles="FICHAS" icon="people" to="/fiches"></buttonsMenu>
-          <buttonsMenu titles="APRENDICES" icon="school" to="/apprentice"></buttonsMenu>
-          <buttonsMenu titles="BITÁCORAS" icon="list_alt" to="/binnacle"></buttonsMenu>
-          <buttonsMenu titles="MODALIDAD" icon="info" to="/modality"></buttonsMenu>
-          <buttonsMenu titles="SEGUIMIENTOS" icon="supervisor_account" to="/followup"></buttonsMenu>
-          <buttonsMenu titles="ASIGNACIONES" icon="history_edu" to="/assignment"></buttonsMenu>
-          <buttonsMenu titles="INFORME" icon="calculate" to="/report"></buttonsMenu>
+          <buttonsMenu titles="INICIO" icon="list" to="/home" v-if="user?.role === 'ADMINISTRADOR'"></buttonsMenu>
+          <buttonsMenu titles="REGISTROS" icon="assignment" to="/log" v-if="user?.role === 'ADMINISTRADOR'"></buttonsMenu>
+          <buttonsMenu titles="FICHAS" icon="people" to="/fiches" v-if="user?.role === 'ADMINISTRADOR'"></buttonsMenu>
+          <buttonsMenu titles="APRENDICES" icon="school" to="/apprentice" v-if="user?.role === 'ADMINISTRADOR'"></buttonsMenu>
+          <buttonsMenu titles="BITÁCORAS" icon="list_alt" to="/binnacle" v-if="user?.role === 'ADMINISTRADOR' || user?.role === 'INSTRUCTOR'"></buttonsMenu>
+          <buttonsMenu titles="MODALIDAD" icon="info" to="/modality" v-if="user?.role === 'ADMINISTRADOR'"></buttonsMenu>
+          <buttonsMenu titles="SEGUIMIENTOS" icon="calendar_today" to="/followup" v-if="user?.role === 'ADMINISTRADOR'"></buttonsMenu>
+          <buttonsMenu titles="ASIGNACIONES" icon="history_edu" to="/assignment" v-if="user?.role === 'ADMINISTRADOR'"></buttonsMenu>
+          <buttonsMenu titles="INFORME" icon="calculate" to="/report" v-if="user?.role === 'ADMINISTRADOR'"></buttonsMenu>
+          <buttonsMenu titles="CONSULTA" icon="analytics" to="/consultor" v-if="user?.role === 'CONSULTOR'"></buttonsMenu>
         </q-item-section>
       </q-item>
     </q-drawer>
@@ -62,11 +59,11 @@
     <!-- Footer -->
     <q-footer class="footer-custom">
       <q-toolbar class="justify-center">
-        <q-toolbar-titles class="text-center">
+        <q-toolbar-title class="text-center">
           <div class="text-bold tittleFooter">
             REPFORA - Sena 2024 Todos los derechos reservados
           </div>
-        </q-toolbar-titles>
+        </q-toolbar-title>
       </q-toolbar>
     </q-footer>
   </q-layout>
@@ -77,7 +74,7 @@ import { ref, computed } from "vue";
 import { useRouter } from "vue-router";
 import iconSena from '../assets/icon.png';
 import buttonsMenu from '../components/buttons/buttonsMenu.vue';
-import { useAuthStore } from '../stores/authStore';  // Importa la authStore
+import { useAuthStore } from '../stores/authStore';
 
 const leftDrawerOpen = ref(false);
 const router = useRouter();
@@ -114,7 +111,7 @@ function exit() {
   width: 80px;
   height: 80px;
   margin-bottom: 20px;
-  margin-top: 10px; /* Añadir margen superior */
+  margin-top: 10px;
 }
 
 /* Drawer */
@@ -155,8 +152,8 @@ function exit() {
 
 /* Footer */
 .footer-custom {
-  background-color: #b0b0b0d8; /* Cambia este color según tus necesidades */
-  color: rgb(0, 0, 0); /* Color del texto en el footer */
+  background-color: #b0b0b0d8;
+  color: rgb(0, 0, 0);
 }
 
 .tittleFooter {
