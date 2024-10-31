@@ -16,17 +16,21 @@ import assignmentImage from '../assets/img/modalidadImage.png';
 <template>
     <div class="q-pa-xl row items-center justify-center q-gutter-md contenedor">
         <div>
-            <CardComponent titles="LOG" :imageSRC="logImage" to="/log" />
+            <CardComponent titles="REGISTROS" :imageSRC="logImage" to="/log" />
         </div>
         <div>
             <CardComponent titles="APRENDICES" :imageSRC="apprenticeImage" to="/apprentice" />
         </div>
         <div>
-            <CardComponent titles="BITACORA" :imageSRC="binnacleImage" to="/binnacle" />
+            <CardComponent titles="BITACORAS" :imageSRC="binnacleImage" to="/binnacle" />
+        </div>
+
+        <div>
+            <CardComponent titles="FICHAS" :imageSRC="binnacleImage" to="/fiches" />
         </div>
         
         <div>
-            <CardComponent titles="MODALIDAD" :imageSRC="modalityImage" to="/modality" />
+            <CardComponent titles="MODALIDADES" :imageSRC="modalityImage" to="/modality" />
         </div>
         
         <div>
@@ -34,7 +38,11 @@ import assignmentImage from '../assets/img/modalidadImage.png';
         </div>
 
         <div>
-            <CardComponent titles="ASIGNACION" :imageSRC="assignmentImage" to="/assignment" />
+            <CardComponent titles="ASIGNACIONES" :imageSRC="assignmentImage" to="/assignment" />
+        </div>
+
+        <div>
+            <CardComponent titles="INFORMES" :imageSRC="assignmentImage" to="/report" />
         </div>
     </div>
 </template>

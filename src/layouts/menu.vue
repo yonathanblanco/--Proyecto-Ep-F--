@@ -1,99 +1,105 @@
 <template>
   <q-layout view="hHh Lpr lFf">
-
+    <!-- Header -->
     <q-header elevated class="bg-green-9 text-white">
       <q-toolbar>
         <q-btn dense flat round icon="menu" @click="toggleLeftDrawer" />
-
         <q-toolbar-title class="titlesHeader">
           <router-link to="/home" class="titles">
-            REPFORA
+            ETAPAS PRODUCTIVAS
           </router-link>
         </q-toolbar-title>
-
-        <!-- Agrega q-space para empujar el botón de logout a la derecha -->
         <q-space />
-
         <q-btn dense flat round icon="logout" @click="exit" />
       </q-toolbar>
     </q-header>
 
+    <!-- Drawer (menú lateral) -->
     <q-drawer v-model="leftDrawerOpen" class="leftDrawer" side="left" overlay behavior="desktop" elevated>
+      <!-- Información del usuario -->
       <q-item class="headerMenu">
         <q-item avatar class="no-padding">
           <q-avatar class="imgSena">
             <img :src="iconSena"/>
           </q-avatar>
         </q-item>
-
         <q-item-section>
           <q-item-label>
             <div class="text-h5 text-bold">
-              <p class="tittleMenu"></p>
-              <p class="userMenu"></p>
-              <p class="userEmail"></p>
+              <!-- Mostrar el rol y el email del usuario -->
+              <p class="userMenu">{{ user?.role || 'Rol no disponible' }}</p>
+              <p class="userEmail">{{ user?.email || 'Email no disponible' }}</p>
             </div>
           </q-item-label>
         </q-item-section>
       </q-item>
 
+      <!-- Opciones del menú, según el rol -->
       <q-item class="bodyMenu">
         <q-item-section>
-
-          <buttonsMenu titles="LOG" icon="assignment" to="/log"></buttonsMenu>
-          <buttonsMenu titles="APRENDICES" icon="school" to="/apprentice"></buttonsMenu>
-          <buttonsMenu titles="BITACORA" icon="list_alt" to="/binnacle"></buttonsMenu>
-          <buttonsMenu titles="MODALIDA" icon="info" to="/modality"></buttonsMenu>
-          <buttonsMenu titles="SEGUIMIENTOS" icon="supervisor_account" to="/followup"></buttonsMenu>
-          <buttonsMenu titles="ASIGNACION" icon="assignment_ind" to="/assignment"></buttonsMenu>
-
+          <buttonsMenu titles="INICIO" icon="list" to="/home" v-if="user?.role === 'ADMINISTRADOR'"></buttonsMenu>
+          <buttonsMenu titles="REGISTROS" icon="assignment" to="/log" v-if="user?.role === 'ADMINISTRADOR'"></buttonsMenu>
+          <buttonsMenu titles="FICHAS" icon="people" to="/fiches" v-if="user?.role === 'ADMINISTRADOR'"></buttonsMenu>
+          <buttonsMenu titles="APRENDICES" icon="school" to="/apprentice" v-if="user?.role === 'ADMINISTRADOR'"></buttonsMenu>
+          <buttonsMenu titles="BITÁCORAS" icon="list_alt" to="/binnacle" v-if="user?.role === 'ADMINISTRADOR' || user?.role === 'INSTRUCTOR'"></buttonsMenu>
+          <buttonsMenu titles="MODALIDAD" icon="info" to="/modality" v-if="user?.role === 'ADMINISTRADOR'"></buttonsMenu>
+          <buttonsMenu titles="SEGUIMIENTOS" icon="calendar_today" to="/followup" v-if="user?.role === 'ADMINISTRADOR'"></buttonsMenu>
+          <buttonsMenu titles="ASIGNACIONES" icon="history_edu" to="/assignment" v-if="user?.role === 'ADMINISTRADOR'"></buttonsMenu>
+          <buttonsMenu titles="INFORME" icon="calculate" to="/report" v-if="user?.role === 'ADMINISTRADOR'"></buttonsMenu>
+          <buttonsMenu titles="CONSULTA" icon="analytics" to="/consultor" v-if="user?.role === 'CONSULTOR'"></buttonsMenu>
         </q-item-section>
       </q-item>
-
     </q-drawer>
 
+    <!-- Contenedor de página -->
     <q-page-container>
       <router-view />
     </q-page-container>
 
+    <!-- Footer -->
     <q-footer class="footer-custom">
-            <q-toolbar class="justify-center">
-            <q-toolbar-titles class="text-center">
-              <div class="text-bold tittleFooter">REPFORA - Sena 2024 Todos los derechos reservados </div>
-            </q-toolbar-titles>
-            </q-toolbar>
+      <q-toolbar class="justify-center">
+        <q-toolbar-title class="text-center">
+          <div class="text-bold tittleFooter">
+            REPFORA - Sena 2024 Todos los derechos reservados
+          </div>
+        </q-toolbar-title>
+      </q-toolbar>
     </q-footer>
-
   </q-layout>
 </template>
 
 <script setup>
-import { ref } from "vue";
-import { useRouter } from 'vue-router';
+import { ref, computed } from "vue";
+import { useRouter } from "vue-router";
 import iconSena from '../assets/icon.png';
 import buttonsMenu from '../components/buttons/buttonsMenu.vue';
-import { useAuthStore } from '../stores/authStore'; 
-
+import { useAuthStore } from '../stores/authStore';
 
 const leftDrawerOpen = ref(false);
 const router = useRouter();
 
+// Función para abrir/cerrar el drawer
 function toggleLeftDrawer() {
   leftDrawerOpen.value = !leftDrawerOpen.value;
 }
 
+// Obtener los detalles del usuario desde el store
 const authStore = useAuthStore();
+const user = computed(() => authStore.getUserDetails());  // Computed para reactividad
 
-
+// Función para cerrar sesión
 function exit() {
-  authStore.setToken("");
-  router.push('/'); 
+  authStore.setToken("");  // Limpiar el token
+  authStore.setUserDetails({ email: "", role: "" });  // Limpiar los detalles del usuario
+  localStorage.removeItem('auth');  // Limpiar el localStorage
+  router.push('/');  // Redireccionar al inicio de sesión
 }
 </script>
 
 <style scoped>
 * {
-  font-family: Roboto, -apple-system, Helvetica Neue, Helvetica, Arial, sans-serif
+  font-family: Roboto, -apple-system, Helvetica Neue, Helvetica, Arial, sans-serif;
 }
 
 .bodyMenu {
@@ -105,6 +111,7 @@ function exit() {
   width: 80px;
   height: 80px;
   margin-bottom: 20px;
+  margin-top: 10px;
 }
 
 /* Drawer */
@@ -115,18 +122,10 @@ function exit() {
   padding: 20px 0;
   background: rgb(228, 225, 225);
   text-align: center;
+  margin-bottom: 10px;
 }
 
-/* Tittles and texts */
-.tittleFooter {
-  font-size: .75em;
-  
-}
-.footer-custom {
-  background-color: #ddfadbd0; /* Cambia este color según tus necesidades */
-  color: rgb(0, 0, 0); /* Color del texto en el footer */
-}
-
+/* Títulos y textos */
 .titlesHeader {
   font-size: 1.5em;
   font-weight: 700;
@@ -136,9 +135,9 @@ function exit() {
   margin: 0;
 }
 
-.tittleMenu {
+.userMenu {
   font-size: 1em;
-  font-weight: 700;
+  font-weight: 600;
 }
 
 .titles {
@@ -146,28 +145,19 @@ function exit() {
   text-decoration: none;
 }
 
-.userMenu {
-  font-size: .8em;
-  font-weight: 600;
-}
-
 .userEmail {
-  font-size: .6em;
+  font-size: 0.8em;
   font-weight: 500;
 }
 
-p {
-  margin: 0;
-  padding: 0;
+/* Footer */
+.footer-custom {
+  background-color: #b0b0b0d8;
+  color: rgb(0, 0, 0);
 }
 
-/* Tittles and texts */
 .tittleFooter {
   font-size: 16px;
-  
-}
-.footer-custom {
-  background-color: #b0b0b0d8; /* Cambia este color según tus necesidades */
-  color: rgb(0, 0, 0); /* Color del texto en el footer */
+  font-weight: bold;
 }
 </style>

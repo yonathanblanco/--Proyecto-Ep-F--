@@ -65,7 +65,7 @@ function openDialog(row) {
 
 <template>
     <div>
-      <Title title="Asignación" />
+      <Title title="ASIGNACIONES" />
   
       <div>
         <ButtonOpenModal titles="CREAR" icon="add" />
