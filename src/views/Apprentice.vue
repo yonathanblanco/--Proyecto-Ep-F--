@@ -1,133 +1,161 @@
 <script setup>
-import Table from "../components/tables/tableStatus.vue";
+import { ref, onBeforeMount } from "vue";
+import { format, useQuasar } from "quasar";
+import { getData, putData } from "../services/apiClient";
+import Table from "../components/tables/tablestatus.vue";
 import buttonAdd from "../components/buttons/buttonAdd.vue";
 import Title from "../components/tittle/tittle.vue";
-import { ref, onMounted } from "vue";
-import { getData } from "../services/apiClient.js";
+import Modal from "../components/modal/modal.vue";
+import ButtonBack from "../components/buttons/buttonBack.vue";
 
 const fixed = ref(false);
 const isEditing = ref(false);
+const $q = useQuasar();
 
-const rows = ref([]);
-
-
-let alert = ref(false);
+onBeforeMount(() => {
+  getApprentices();
+});
 
 const columns = ref([
   {
-    name: "fiche",
-    label: "Ficha",
-    field: "fiche",
-    align: "center",
-    field: (row) => row.fiche.name,
-  },
-  {
     name: "tpdocument",
-    label: "Tipo Documento",
+    required: true,
     align: "center",
+    label: "Tipo de Documento",
     field: "tpdocument",
     sortable: true,
   },
   {
     name: "numdocument",
+    required: true,
     align: "center",
-    label: "Número Documento",
+    label: "Num. Documento",
     field: "numdocument",
     sortable: true,
   },
   {
     name: "firstname",
-    label: "Nombre",
+    required: true,
     align: "center",
+    label: "Nombre",
     field: "firstname",
     sortable: true,
   },
   {
     name: "lastname",
-    label: "Apellido",
+    required: true,
     align: "center",
+    label: "Apellido",
     field: "lastname",
     sortable: true,
   },
   {
     name: "phone",
-    label: "Teléfono",
     align: "center",
+    label: "Teléfono",
     field: "phone",
     sortable: true,
   },
   {
-    name: "email",
-    label: "Correo Electrónico",
+    name: "personalEmail",
+    required: true,
     align: "center",
-    field: "email",
+    label: "Email Personal",
+    field: "personalEmail",
     sortable: true,
   },
   {
-    name: "modality",
-    label: "Modalidad",
+    name: "institucionalEmail",
+    required: true,
     align: "center",
-    field: "modality",
+    label: "Email Institucional",
+    field: "institucionalEmail",
+    sortable: true,
+  },
+  {
+    name: "ficheName",
+    align: "center",
+    label: "Nombre de Ficha",
+    field: (row) => row.fiche?.name || "",
+    sortable: true,
+  },
+  {
+    name: "ficheNumber",
+    align: "center",
+    label: "Num. Ficha",
+    field: (row) => row.fiche?.number || "",
     sortable: true,
   },
   {
     name: "status",
-    label: "Estado",
     align: "center",
+    label: "Estado",
     field: "status",
     sortable: true,
   },
-  { name: "editar", label: "Editar", align: "center", field: "editar" },
   {
-    name: "activar",
-    label: "Activar/Desactivar",
+    name: "opciones",
+    required: true,
     align: "center",
-    field: "activar",
+    label: "Opciones",
   },
 ]);
 
+const rows = ref([]);
+
 async function getApprentices() {
-  let res = await getData("apprentice/listallapprentice");
+  const storedAuth = localStorage.getItem("auth");
+  const token = storedAuth ? JSON.parse(storedAuth) : null;
+  console.log(token.token);
+  const res = await getData("apprentice/listallapprentice");
   rows.value = res;
   console.log(res);
 }
 
-onMounted(() => {
-  getApprentices();
-});
-
-function openAddModal(row) {
-  alert.value = true;
-  console.log(row);
+function openAddModal() {
+  fixed.value = true;
+  isEditing.value = false;
 }
 
+function edit(row) {
+  fixed.value = true;
+  isEditing.value = true;
+}
 
+async function activate(id) {
+  const res = await putData("apprentice/enableapprentice/${id}");
+  console.log(res);
+  await getApprentices();
+}
+
+async function deactivate(id) {
+  const res = await putData("apprentice/disableapprentice/${id}");
+  console.log(res);
+  await getApprentices();
+}
 </script>
 
 <template>
-  <div>
-    <Title title="APRENDICES" />
-
-    
+  <div class="q-gutter-md divMain">
     <div>
-      <buttonAdd :openAddModal="openAddModal" />
+      <ButtonBack />
+      <Title title="APRENDICES" />
+      <div>
+        <buttonAdd :openAddModal="openAddModal" />
+      </div>
     </div>
-    <div style="display: flex; justify-content: center; padding: 10px">
-      <Table :rows="rows" :columns="columns" :onClickEdit="openDialog" />
-      <q-dialog v-model="alert">
-        <q-card>
-          <q-card-section>
-            <div class="text-h6">Alerta</div>
-          </q-card-section>
 
-          <q-card-section class="q-pt-none">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Rerum
-            repellendus sit voluptate voluptas eveniet porro. Rerum blanditiis
-            perferendis totam, ea at omnis vel numquam exercitationem aut, natus
-            minima, porro la
-          </q-card-section>
+    <div>
+      <Table
+        :rows="rows"
+        :columns="columns"
+        :openEditModal="edit"
+        :activate="activate"
+        :deactivate="deactivate"
+      />
+    </div>
 
-          <ModalCreateUpdate
+    <Modal
       :fixed="fixed"
       :isEditing="isEditing"
       entityName="Aprendices"
@@ -198,7 +226,7 @@ function openAddModal(row) {
         <q-input
           filled
           v-model="email"
-          label="Email"
+          label="Email Personal"
           class="input thin-input"
           label-color="green-9"
         >
@@ -209,8 +237,20 @@ function openAddModal(row) {
 
         <q-input
           filled
-          v-model="ficheName"
-          label="Nombre de Ficha"
+          v-model="emailInstitucional"
+          label="Email Institucional"
+          class="input thin-input"
+          label-color="green-9"
+        >
+          <template v-slot:prepend>
+            <q-icon color="green-10" name="email" />
+          </template>
+        </q-input>
+
+        <q-input
+          filled
+          v-model="modality"
+          label="Modalidad Epata Productiva"
           class="input thin-input"
           label-color="green-9"
         >
@@ -221,8 +261,8 @@ function openAddModal(row) {
 
         <q-input
           filled
-          v-model="ficheNumber"
-          label="Num. Ficha"
+          v-model="fiche"
+          label="Ficha"
           class="input thin-input"
           label-color="green-9"
         >
@@ -231,9 +271,22 @@ function openAddModal(row) {
           </template>
         </q-input>
       </template>
-    </ModalCreateUpdate>
-        </q-card>
-      </q-dialog>
-    </div>
+    </Modal>
   </div>
 </template>
+
+<style scoped>
+/* Inputs */
+
+.input {
+  margin: 7px 0;
+  color: "green";
+  border-color: "green";
+}
+
+/* divs */
+.divMain {
+  padding: 0 1.5%;
+  margin-top: 20px;
+}
+</style>
