@@ -1,51 +1,39 @@
 <script setup>
 import { ref, onBeforeMount } from "vue";
 import { useQuasar } from "quasar";
-import { getData, putData } from "../services/apiClient";
+import { getRepforaData } from "../services/apiRepfora";
 import Table from "../components/tables/tablestatus.vue";
-import ButtonAdd from "../components/buttons/buttonAdd.vue";
 import Title from "../components/tittle/tittle.vue";
 import Modal from "../components/modal/modal.vue";
 import ButtonBack from '../components/buttons/buttonBack.vue';
 
 const fixed = ref(false);
-const isEditing = ref(false);
+
 const $q = useQuasar();
 
-onBeforeMount(() => 
-
-
-{
+onBeforeMount(() => {
   getFiches();
 });
 
 const columns = ref([
   {
-    name: "number",
-    required: true,
-    align: "center",
-    label: "N°",
-    field: "number",
-    sortable: true,
-  },
-  {
     name: "ficheName",
     align: "center",
-    label: "NOMBRE FICHA",
+    label: "Nombre de Ficha",
     field: "name",
     sortable: true,
   },
   {
     name: "ficheNumber",
     align: "center",
-    label: "COD. FICHA",
+    label: "Numero de Ficha",
     field: "number",
     sortable: true,
   },
   {
     name: "status",
     align: "center",
-    label: "ESTADO",
+    label: "Estado",
     field: "status",
     sortable: true,
   },
@@ -53,7 +41,7 @@ const columns = ref([
     name: "verAprendices",
     required: true,
     align: "center",
-    label: "VER APRENDICES",
+    label: "Ver Aprendices",
   },
 ]);
 
@@ -62,25 +50,11 @@ const searchTerm = ref('');
 
 async function getFiches() {
   const storedAuth = localStorage.getItem('auth');
-  const token = storedAuth ? JSON.parse(storedAuth) : null;
-  console.log(token.token);
-  const res = await getData("/listFiche");
-  rows.value = res.map((fiche, index) => ({
-    ...fiche,
-    number: index + 1,
-    status: "Activa"  // Assuming all fiches are active by default
-  }));
+const token = storedAuth ? JSON.parse(storedAuth) : null;
+console.log(token.token);
+  const res = await getRepforaData("/listFiche");
+  rows.value = res;
   console.log(res);
-}
-
-function openAddModal() {
-  fixed.value = true;
-  isEditing.value = false;
-}
-
-function edit(row) {
-  fixed.value = true;
-  isEditing.value = true;
 }
 
 function viewApprentices(ficheId) {
@@ -94,9 +68,6 @@ function viewApprentices(ficheId) {
     <div>
       <ButtonBack />
       <Title title="FICHAS" />
-      <div>
-        <ButtonAdd :openAddModal="openAddModal" />
-      </div>
     </div>
 
     <q-input
@@ -128,40 +99,6 @@ function viewApprentices(ficheId) {
         </template>
       </Table>
     </div>
-
-    <Modal
-      :fixed="fixed"
-      :isEditing="isEditing"
-      entityName="Fichas"
-      iconName="school"
-      @update:fixed="(val) => (fixed = val)"
-    >
-      <template v-slot:modal-content>
-        <q-input
-          filled
-          v-model="ficheName"
-          label="Nombre de Ficha"
-          class="input thin-input"
-          label-color="green-9"
-        >
-          <template v-slot:prepend>
-            <q-icon color="green-10" name="note" />
-          </template>
-        </q-input>
-
-        <q-input
-          filled
-          v-model="ficheNumber"
-          label="Cod. Ficha"
-          class="input thin-input"
-          label-color="green-9"
-        >
-          <template v-slot:prepend>
-            <q-icon color="green-10" name="confirmation_number" />
-          </template>
-        </q-input>
-      </template>
-    </Modal>
   </div>
 </template>
 
