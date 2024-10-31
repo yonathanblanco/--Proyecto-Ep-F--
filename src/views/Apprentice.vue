@@ -6,9 +6,7 @@ import Table from "../components/tables/tablestatus.vue";
 import buttonAdd from "../components/buttons/buttonAdd.vue";
 import Title from "../components/tittle/tittle.vue";
 import Modal from "../components/modal/modal.vue";
-import ButtonBack from '../components/buttons/buttonBack.vue';
-
-
+import ButtonBack from "../components/buttons/buttonBack.vue";
 
 const fixed = ref(false);
 const isEditing = ref(false);
@@ -106,9 +104,9 @@ const columns = ref([
 const rows = ref([]);
 
 async function getApprentices() {
-  const storedAuth = localStorage.getItem('auth');
-const token = storedAuth ? JSON.parse(storedAuth) : null;
-console.log(token.token);
+  const storedAuth = localStorage.getItem("auth");
+  const token = storedAuth ? JSON.parse(storedAuth) : null;
+  console.log(token.token);
   const res = await getData("apprentice/listallapprentice");
   rows.value = res;
   console.log(res);
@@ -131,7 +129,7 @@ async function activate(id) {
 }
 
 async function deactivate(id) {
-  const res = await putData('apprentice/disableapprentice/${id}');
+  const res = await putData("apprentice/disableapprentice/${id}");
   console.log(res);
   await getApprentices();
 }
@@ -145,11 +143,8 @@ async function deactivate(id) {
       <div>
         <buttonAdd :openAddModal="openAddModal" />
       </div>
-
-      
     </div>
 
-    
     <div>
       <Table
         :rows="rows"
