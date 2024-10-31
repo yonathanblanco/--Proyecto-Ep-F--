@@ -1,5 +1,5 @@
 <template>
-  <div style="width:90%">
+  <div class="table-container">
     <q-table :rows="rows" :columns="columns" flat bordered class="styled-table">
       <!-- Celda de edición -->
       <template v-slot:body-cell-editar="props">
@@ -12,24 +12,31 @@
 
       <!-- Slot para la columna 'opciones' -->
       <template v-slot:body-cell-opciones="props">
-              <q-td :props="props">
-                  <!-- Botón de edición -->
-                  <q-btn @click="openEditModal(props.row)" class="buttonsTable">
-                      <q-icon name="edit" class="icon-edit"></q-icon>
-                  </q-btn>
+        <q-td :props="props">
+          <!-- Botón de edición -->
+          <q-btn @click="openEditModal(props.row)" class="buttonsTable">
+            <q-icon name="edit" class="icon-edit"></q-icon>
+          </q-btn>
 
-                  <!-- Botón de activación -->
-                  <q-btn @click="activate(props.row._id)" v-if="props.row.status == 0" class="buttonsTable">
-                      <q-icon name="check" class="icon-activate"></q-icon>
-                  </q-btn>
+          <!-- Botón de activación -->
+          <q-btn @click="activate(props.row._id)" v-if="props.row.status == 0" class="buttonsTable">
+            <q-icon name="check" class="icon-activate"></q-icon>
+          </q-btn>
 
+          <!-- Botón de desactivación con spinner -->
+          <q-btn @click="deactivate(props.row._id)" v-else class="buttonsTable button-deactivate">
+            <q-icon name="close" class="icon-deactivate"></q-icon>
+          </q-btn>
+        </q-td>
+      </template>
 
-                  <!-- Botón de desactivación con spinner -->
-                  <q-btn @click="deactivate(props.row._id)" v-else class="buttonsTable button-deactivate">
-                      <q-icon name="close" class="icon-deactivate"></q-icon>
-                  </q-btn>
-              </q-td>
-          </template>
+      <!-- Slot para la columna 'estado' -->
+      <template v-slot:body-cell-status="props">
+        <q-td :props="props">
+          <p style="color:green" v-if="props.row.status == 1">Activo</p>
+          <p style="color:red" v-else>Inactivo</p>
+        </q-td>
+      </template>
 
       <!-- Celda de activación/desactivación -->
       <template v-slot:body-cell-activar="props">
@@ -63,18 +70,24 @@ const props = defineProps({
     required: true
   },
   activate: {
-      type: Function,
-      required: true
+    type: Function,
+    required: true
   },
   deactivate: {
-      type: Function,
-      required: true
+    type: Function,
+    required: true
   }
-
 });
 </script>
 
 <style scoped>
+/* Contenedor de la tabla centrado */
+.table-container {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
 /* Estilo general de la tabla */
 .styled-table {
   font-family: 'Arial', sans-serif;
@@ -126,6 +139,7 @@ const props = defineProps({
 .activate-btn:hover {
   background-color: #388E3C;
 }
+
 .icon-edit {
   color: #1f7d22;
 }
@@ -139,5 +153,4 @@ const props = defineProps({
   color: #F44336;
   font-weight: bold;
 }
-
 </style>
