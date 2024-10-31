@@ -113,33 +113,6 @@ const props = defineProps({
   transition: background-color 0.3s ease;
 }
 
-/* Botón de editar */
-.edit-btn {
-  background-color: #2196F3;
-}
-
-.edit-btn:hover {
-  background-color: #1976D2;
-}
-
-/* Botón de desactivación */
-.deactivate-btn {
-  background-color: #f44336;
-}
-
-.deactivate-btn:hover {
-  background-color: #d32f2f;
-}
-
-/* Botón de activación */
-.activate-btn {
-  background-color: #4CAF50;
-}
-
-.activate-btn:hover {
-  background-color: #388E3C;
-}
-
 .icon-edit {
   color: #1f7d22;
 }
