@@ -31,6 +31,13 @@
               </q-td>
           </template>
 
+          <!-- Slot para la columna 'estado' -->
+          <template v-slot:body-cell-status="props">
+                <q-td :props="props">
+                    <p style="color:green" v-if="props.row.status == 1">Activo</p>
+                    <p style="color:red" v-else>Inactivo</p>
+                </q-td>
+            </template>
       <!-- Celda de activación/desactivación -->
       <template v-slot:body-cell-activar="props">
         <q-td :props="props" v-if="props.row.estado == 1" class="q-pa-sm">
