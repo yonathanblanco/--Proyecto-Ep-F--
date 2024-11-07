@@ -1,4 +1,4 @@
-<template>
+{/* <template>
   <div class="login-container">
     <q-layout view="lHh Lpr lFf">
       <q-page-container>
@@ -17,7 +17,6 @@
                 <q-select
                   id="rol"
                   v-model="role"
-                  @change="handleRoleChange"
                   class="input-field"
                   :options="rolesOptions"
                   emit-value
@@ -107,12 +106,10 @@
 
             <!-- Olvidar contraseña -->
             <q-card-section class="forgot-password text-center q-my-sm">
-  <router-link to="/forgotten-password" class="forgot-password">
-    ¿Olvidaste tu contraseña?
-  </router-link>
-</q-card-section>
-
-
+              <router-link to="/forgotten-password" class="forgot-password">
+                ¿Olvidaste tu contraseña?
+              </router-link>
+            </q-card-section>
 
             <!-- Botón de Login -->
             <q-card-section>
@@ -132,9 +129,9 @@
 
           <q-footer class="footer-custom">
             <q-toolbar class="justify-center">
-            <q-toolbar-titles class="text-center">
-              <div class="text-bold tittleFooter">REPFORA - Sena 2024 Todos los derechos reservados </div>
-            </q-toolbar-titles>
+              <q-toolbar-title class="text-center">
+                <div class="text-bold tittleFooter">REPFORA - Sena 2024 Todos los derechos reservados </div>
+              </q-toolbar-title>
             </q-toolbar>
           </q-footer>
         </q-page>
@@ -252,7 +249,6 @@ async function handleLogin() {
 }
 </script>
 
-
 <style scoped>
 .bg-login {
   background-color: transparent;
@@ -266,116 +262,25 @@ async function handleLogin() {
   position: relative;
   background-color: #2e7d32;
   padding: 10px 20px; 
-  border-radius: 10px 10px 0 0;
-}
-
-.imgSena {
-  max-width: 200px; 
-  margin-bottom: 10px;
-}
-
-.login-title {
-  font-family: 'Poppins', sans-serif;
+  border-radius: 10px 10px 0 0; 
   color: white;
-  font-weight: bold;
-  font-size: 1.8rem;
 }
 
 .my_card {
-  width: 28rem;
-  border-radius: 18px;
-  background-color: white;
-  transition: all 0.4s ease;
-  box-shadow: 0 15px 25px rgba(0, 0, 0, 0.1);
-  border: 1px solid #2e7d32;
-}
-
-.my_card:hover {
-  transform: translateY(-10px);
-  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.2);
-}
-
-.input {
-  margin-bottom: 12px;
-}
-
-.q-mt-md {
-  margin-top: 16px;
-}
-
-.q-mt-xs {
-  margin-top: 4px;
-}
-
-.input:focus {
-  border-color: #2e7d32;
-  box-shadow: 0 0 2px #2e7d32;
-}
-
-.cursor-pointer {
-  cursor: pointer;
-  transition: 0.3s;
-}
-
-.cursor-pointer:hover {
-  color: #2e7d32;
-}
-
-.forgot-password {
-  text-decoration: none; /* Elimina el subrayado */
-  font-size: 0.9rem;
-  font-weight: bold;
-  color: #2e7d32; /* Color verde */
-  transition: color 0.3s; /* Transición suave para el hover */
-}
-
-.forgot-password:hover {
-  color: #4caf50; /* Color verde más claro en hover */
-}
-
-
-
-.btn-login {
-  background: linear-gradient(45deg, #2e7d32, #2e7d32);
-  color: white;
-  font-weight: bold;
-  transition: background 0.3s ease;
-}
-
-.btn-login:hover {
-  background: linear-gradient(45deg, #1b5e20, #1b5e20);
-  transform: translateY(-3px);
-  box-shadow: 0 10px 20px rgba(46, 125, 50, 0.4);
-}
-
-.form-group {
-  margin-bottom: 16px;
-}
-
-.form-label {
-  display: block;
-  margin-bottom: 8px;
-  font-weight: bold;
+  max-width: 500px; 
+  width: 100%;
+  border-radius: 15px;
 }
 
 .input-field {
-  width: 100%;
-  padding: 8px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  transition: border-color 0.3s ease;
-}
-
-.input-field:focus {
-  border-color: #2e7d32;
-}
-
-.tittleFooter {
-  font-size: 16px;
+  margin-top: 10px; 
 }
 
 .footer-custom {
-  background-color: #b0b0b0d8;
-  color: rgb(0, 0, 0);
+  background-color: #2e7d32;
 }
-</style>
+
+.tittleFooter {
+  color: white;
+}
+</style> */}
