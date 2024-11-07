@@ -153,17 +153,14 @@ import { useRouter } from 'vue-router';
 import { useAuthStore } from '../stores/authStore.js';
 import logosena from "../assets/img/logosena.png"
 
-const useAuth = useAuthStore()
+const useAuth = useAuthStore();
 const $router = useRouter();
 
 const email = ref("");
 const password = ref("");
 const documento = ref("");
 const role = ref("");
-let passwordVisible = ref(false);
-
-const isRole = (roles) => role.value === roles;
-
+const passwordVisible = ref(false);
 
 const rolesOptions = ref([
   { value: 'ETAPA PRODUCTIVA', label: 'Administrador' },
@@ -171,26 +168,39 @@ const rolesOptions = ref([
   { value: 'consultor', label: 'Consultor' },
 ]);
 
-
-async function loginAdmin(email, password, role) {
-  if (!validarCampos(email, password)) {
-    return;  
+const validateForm = () => {
+  if (!role.value) {
+    notifyErrorRequest("Por favor, selecciona un rol.");
+    return false;
   }
   
+  if ((isRole('ETAPA PRODUCTIVA') || isRole('Instructor')) && (!email.value || !password.value)) {
+    notifyErrorRequest("Por favor, completa todos los campos obligatorios.");
+    return false;
+  }
+
+  if (isRole('consultor') && (!email.value || !documento.value)) {
+    notifyErrorRequest("Por favor, completa todos los campos obligatorios.");
+    return false;
+  }
+
+  return true;
+};
+
+const isRole = (roles) => role.value === roles;
+
+async function loginAdmin(email, password, role) {
   try {
     const res = await postData("http://89.116.49.65:4500/api/users/login", { email, password, role });
     
     // Guarda el token en Pinia
     useAuth.setToken(res.token);  
-    
     // Guarda el email y rol en Pinia
     useAuth.setUserDetails({ email: res.email, role: 'ADMINISTRADOR' });
-  
     // Almacena el token en localStorage
     localStorage.setItem('auth', JSON.stringify({ token: res.token }));
     
     notifySuccessRequest("Inicio de sesión exitoso");
-    
     // Redirige al home
     $router.push("/home");
   } catch (error) {
@@ -199,24 +209,17 @@ async function loginAdmin(email, password, role) {
 }
 
 async function loginInstructor(email, password) {
-  if (!validarCampos(email, password)) {
-    return;  
-  }
-  
   try {
     const res = await postRepforaData("/instructors/login", { email, password });
     
     // Guarda el token en Pinia
     useAuth.setToken(res.token);  
-    
     // Guarda el email y rol en Pinia
-    useAuth.setUserDetails({ email: res.email, role: 'INSTRUCTOR' });  // Define 'instructor' como rol
-    
+    useAuth.setUserDetails({ email: res.email, role: 'INSTRUCTOR' });
     // Almacena el token en localStorage
     localStorage.setItem('auth', JSON.stringify({ token: res.token }));
     
     notifySuccessRequest("Inicio de sesión exitoso");
-    
     // Redirige al home
     $router.push("/home");
   } catch (error) {
@@ -224,12 +227,7 @@ async function loginInstructor(email, password) {
   } 
 }
 
-
 async function loginConsultor(email, documento) {
-  if (!validarCampos(email, '', documento)) {
-    return; 
-  }
-
   try {
     const res = await postRepforaData("aprendiz/login", { email, documento });
     notifySuccessRequest("Inicio de sesión exitoso");
@@ -239,8 +237,11 @@ async function loginConsultor(email, documento) {
   }
 }
 
-
 async function handleLogin() {
+  if (!validateForm()) {
+    return; // No continuar si la validación falla
+  }
+
   if (isRole('ETAPA PRODUCTIVA')) {
     await loginAdmin(email.value, password.value, role.value);
   } else if (isRole('Instructor')) {
@@ -250,6 +251,7 @@ async function handleLogin() {
   }
 }
 </script>
+
 
 <style scoped>
 .bg-login {
