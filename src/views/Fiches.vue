@@ -1,7 +1,7 @@
 <script setup>
 import { ref, onBeforeMount } from "vue";
 import { useQuasar } from "quasar";
-import { getRepforaData } from "../services/apiRepfora";
+import { getData } from "../services/apiClient";
 import Table from "../components/tables/tablestatus.vue";
 import Title from "../components/tittle/tittle.vue";
 import Modal from "../components/modal/modal.vue";
@@ -20,7 +20,7 @@ const columns = ref([
     name: "ficheName",
     align: "center",
     label: "Nombre de Ficha",
-    field: "name",
+    field: row => row.program?.name || "",
     sortable: true,
   },
   {
@@ -52,7 +52,7 @@ async function getFiches() {
   const storedAuth = localStorage.getItem('auth');
 const token = storedAuth ? JSON.parse(storedAuth) : null;
 console.log(token.token);
-  const res = await getRepforaData("/listFiche");
+  const res = await getData("/repfora/listFiche");
   rows.value = res;
   console.log(res);
 }
