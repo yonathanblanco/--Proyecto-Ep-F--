@@ -8,7 +8,6 @@ import Modal from "../components/modal/modal.vue";
 import ButtonBack from '../components/buttons/buttonBack.vue';
 
 const fixed = ref(false);
-
 const $q = useQuasar();
 
 onBeforeMount(() => {
@@ -17,31 +16,43 @@ onBeforeMount(() => {
 
 const columns = ref([
   {
-    name: "ficheName",
+    name: "index",
     align: "center",
-    label: "Nombre de Ficha",
+    label: "N°",
+    field: "index",
+    format: val => val,
+    sortable: false,
+    style: "width: 5%; text-align: center;",
+  },
+  {
+    name: "ficheName",
+    align: "left",
+    label: "NOMBRE FICHA",
     field: row => row.program?.name || "",
     sortable: true,
+    style: "width: 35%; padding-left: 10px;",
   },
   {
     name: "ficheNumber",
     align: "center",
-    label: "Numero de Ficha",
+    label: "COD. FICHA",
     field: "number",
     sortable: true,
+    style: "width: 20%; text-align: center;",
   },
   {
     name: "status",
     align: "center",
-    label: "Estado",
+    label: "ESTADO",
     field: "status",
     sortable: true,
+    style: "width: 20%; text-align: center;",
   },
   {
     name: "verAprendices",
-    required: true,
     align: "center",
-    label: "Ver Aprendices",
+    label: "VER APRENDICES",
+    style: "width: 20%; text-align: center;",
   },
 ]);
 
@@ -50,15 +61,15 @@ const searchTerm = ref('');
 
 async function getFiches() {
   const storedAuth = localStorage.getItem('auth');
-const token = storedAuth ? JSON.parse(storedAuth) : null;
-console.log(token.token);
+  const token = storedAuth ? JSON.parse(storedAuth) : null;
   const res = await getData("/repfora/listFiche");
-  rows.value = res;
-  console.log(res);
+  rows.value = res.map((item, index) => ({
+    ...item,
+    index: index + 1 // Asegura que la columna N° se rellene correctamente
+  }));
 }
 
 function viewApprentices(ficheId) {
-  // Implement the logic to view apprentices for a specific fiche
   console.log("Viewing apprentices for fiche:", ficheId);
 }
 </script>
@@ -88,13 +99,15 @@ function viewApprentices(ficheId) {
         :filter="searchTerm"
       >
         <template v-slot:body-cell-status="props">
-          <q-td :props="props">
-            <q-btn color="green" :label="props.row.status" size="sm" />
+          <q-td :props="props" class="status-cell">
+            <div class="status-button" :class="{'active-status': props.row.status === 'Activa', 'inactive-status': props.row.status === 'Inactivo'}">
+              {{ props.row.status }}
+            </div>
           </q-td>
         </template>
         <template v-slot:body-cell-verAprendices="props">
-          <q-td :props="props">
-            <q-btn flat round color="primary" icon="visibility" @click="viewApprentices(props.row.id)" />
+          <q-td :props="props" class="view-apprentices-cell">
+            <q-icon name="visibility" color="green" size="32px" @click="viewApprentices(props.row.id)" />
           </q-td>
         </template>
       </Table>
@@ -112,5 +125,37 @@ function viewApprentices(ficheId) {
 .divMain {
   padding: 0 1.5%;
   margin-top: 20px;
+}
+
+.status-cell {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.status-button {
+  border-radius: 20px;
+  padding: 5px 15px;
+  font-size: 14px;
+  text-align: center;
+  font-weight: bold;
+}
+
+.active-status {
+  background-color: #28a745; /* Verde */
+}
+
+.inactive-status {
+  background-color: #dc3545; /* Rojo */
+}
+
+.view-apprentices-cell {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.q-icon {
+  cursor: pointer;
 }
 </style>
