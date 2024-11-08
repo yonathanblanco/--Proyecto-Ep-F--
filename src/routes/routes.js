@@ -33,11 +33,11 @@ const routes = [
             { path: '/report', component: Report, meta: { requiresAuth: true, role: 'ADMINISTRADOR' } },
             { path: '/followup', component: Followup, meta: { requiresAuth: true, role: 'ADMINISTRADOR' } },
             { path: '/log', component: Log, meta: { requiresAuth: true, role: 'ADMINISTRADOR' } },
+            { path: '/register', component: Register, meta: { requiresAuth: true, role: 'ADMINISTRADOR' } },
             { path: '/recordHours', component: RecordHours, meta: { requiresAuth: true, role: 'INSTRUCTOR' } }
         ]
     },
     { path: '/', component: Login },
-    { path: '/register', component: Register },
     { path: '/consultant', component: Consultant, meta: { requiresAuth: true, role: 'CONSULTOR' } }
 ];
 

@@ -119,6 +119,11 @@
                 required>
               </q-btn>
             </q-card-section>
+
+            <!-- Olvidar contraseña -->
+            <q-card-section class="forgot-password text-center q-my-sm">
+              ¿Olvidaste tu contraseña?
+            </q-card-section>
           </q-card>
 
           <q-footer class="footer-custom">
