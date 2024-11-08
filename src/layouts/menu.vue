@@ -38,15 +38,18 @@
       <q-item class="bodyMenu">
         <q-item-section>
           <buttonsMenu titles="INICIO" icon="list" to="/home" v-if="user?.role === 'ADMINISTRADOR'"></buttonsMenu>
+          <buttonsMenu titles="INICIO" icon="list" to="/homeInstructor" v-if="user?.role === 'INSTRUCTOR'"></buttonsMenu>
+          <buttonsMenu titles="MIS ASIGNACIONES" icon="history_edu" to="/assigmentInstructor" v-if="user?.role === 'INSTRUCTOR'"></buttonsMenu>
           <buttonsMenu titles="REGISTROS" icon="assignment" to="/log" v-if="user?.role === 'ADMINISTRADOR'"></buttonsMenu>
           <buttonsMenu titles="FICHAS" icon="people" to="/fiches" v-if="user?.role === 'ADMINISTRADOR'"></buttonsMenu>
           <buttonsMenu titles="APRENDICES" icon="school" to="/apprentice" v-if="user?.role === 'ADMINISTRADOR'"></buttonsMenu>
           <buttonsMenu titles="BITÁCORAS" icon="list_alt" to="/binnacle" v-if="user?.role === 'ADMINISTRADOR' || user?.role === 'INSTRUCTOR'"></buttonsMenu>
           <buttonsMenu titles="MODALIDAD" icon="info" to="/modality" v-if="user?.role === 'ADMINISTRADOR'"></buttonsMenu>
-          <buttonsMenu titles="SEGUIMIENTOS" icon="calendar_today" to="/followup" v-if="user?.role === 'ADMINISTRADOR'"></buttonsMenu>
+          <buttonsMenu titles="SEGUIMIENTOS" icon="calendar_today" to="/followup" v-if="user?.role === 'ADMINISTRADOR' || user?.role === 'INSTRUCTOR'"></buttonsMenu>
           <buttonsMenu titles="ASIGNACIONES" icon="history_edu" to="/assignment" v-if="user?.role === 'ADMINISTRADOR'"></buttonsMenu>
           <buttonsMenu titles="INFORME" icon="calculate" to="/report" v-if="user?.role === 'ADMINISTRADOR'"></buttonsMenu>
           <buttonsMenu titles="CONSULTA" icon="analytics" to="/consultor" v-if="user?.role === 'CONSULTOR'"></buttonsMenu>
+          <buttonsMenu titles="REGISTRO HORAS" icon="analytics" to="/recordHours" v-if="user?.role === 'INSTRUCTOR'"></buttonsMenu>
         </q-item-section>
       </q-item>
     </q-drawer>

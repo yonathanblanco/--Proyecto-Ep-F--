@@ -43,15 +43,6 @@ export const useAuthStore = defineStore("auth", () => {
     console.log("Datos de autenticación limpiados.");
   }
 
-  function login() {
-    // Setea el token y detalles del usuario
-    setToken(response.data.token);
-    setUserDetails(response.data.user);
-  
-    // Forzar la redirección al Home
-    router.push('/home');
-  }
-
   return {
     setToken,
     getToken,
@@ -59,8 +50,7 @@ export const useAuthStore = defineStore("auth", () => {
     setUserDetails,
     getUserDetails,
     user,
-    clearAuthData,
-    login
+    clearAuthData
   };
 }, {
   persist: {

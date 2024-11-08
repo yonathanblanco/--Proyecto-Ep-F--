@@ -13,13 +13,13 @@ export async function postRepforaData(url, data) {
 }
 
 // Función GET
-export async function getRepforaData(url, params = {}) {
+export async function getRepforaData(url, data) {
     try {
-        const response = await apiRepfora.get(url, { params });
+        const response = await apiRepfora.get(url, data);
         return response.data;  // Devuelve los datos de la respuesta
     } catch (error) {
         console.error('Error en la petición GET:', error);
-        throw error;  // Opcionalmente, puedes manejar el error o lanzarlo
+        throw error;
     }
 }
 
