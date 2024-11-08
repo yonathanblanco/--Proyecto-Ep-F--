@@ -2,13 +2,10 @@
 import { ref, onBeforeMount } from "vue";
 import { useQuasar } from "quasar";
 import { getRepforaData } from "../services/apiRepfora";
-import Table from "../components/tables/tablestatus.vue";
 import Title from "../components/tittle/tittle.vue";
-import Modal from "../components/modal/modal.vue";
 import ButtonBack from '../components/buttons/buttonBack.vue';
 
 const fixed = ref(false);
-
 const $q = useQuasar();
 
 onBeforeMount(() => {
@@ -17,31 +14,43 @@ onBeforeMount(() => {
 
 const columns = ref([
   {
-    name: "ficheName",
+    name: "index",
     align: "center",
-    label: "Nombre de Ficha",
+    label: "N°",
+    field: "index",
+    format: val => val,
+    sortable: false,
+    style: "width: 5%; text-align: center;",
+  },
+  {
+    name: "ficheName",
+    align: "left",
+    label: "NOMBRE FICHA",
     field: row => row.program?.name || "",
     sortable: true,
+    style: "width: 20%;  ",
   },
   {
     name: "ficheNumber",
     align: "center",
-    label: "Numero de Ficha",
+    label: "COD. FICHA",
     field: "number",
     sortable: true,
+    style: "width: 20%; text-align: center;",
   },
   {
     name: "status",
     align: "center",
-    label: "Estado",
+    label: "ESTADO",
     field: "status",
     sortable: true,
+    style: "width: 20%; text-align: center;",
   },
   {
     name: "verAprendices",
-    required: true,
     align: "center",
-    label: "Ver Aprendices",
+    label: "VER APRENDICES",
+    style: "width: 20%; text-align: center;",
   },
 ]);
 
@@ -50,67 +59,101 @@ const searchTerm = ref('');
 
 async function getFiches() {
   const storedAuth = localStorage.getItem('auth');
-const token = storedAuth ? JSON.parse(storedAuth) : null;
-console.log(token.token);
+  const token = storedAuth ? JSON.parse(storedAuth) : null;
   const res = await getRepforaData("/fiches");
-  rows.value = res;
-  console.log(res);
+  rows.value = res.map((item, index) => ({
+    ...item,
+    index: index + 1
+  }));
 }
 
 function viewApprentices(ficheId) {
-  // Implement the logic to view apprentices for a specific fiche
   console.log("Viewing apprentices for fiche:", ficheId);
 }
 </script>
 
 <template>
-  <div class="q-gutter-md divMain">
-    <div>
+  <div class="q-pa-md">
+    <div class="q-mb-md">
       <ButtonBack />
       <Title title="FICHAS" />
     </div>
 
     <q-input
       v-model="searchTerm"
-      filled
+      outlined
+      dense
       placeholder="Ingrese el nombre o número de documento"
       class="q-mb-md"
+      style="max-width: 500px;"
     >
       <template v-slot:prepend>
         <q-icon name="search" />
       </template>
     </q-input>
 
-    <div>
-      <Table
-        :rows="rows"
-        :columns="columns"
-        :filter="searchTerm"
-      >
-        <template v-slot:body-cell-status="props">
-          <q-td :props="props">
-            <q-btn color="green" :label="props.row.status" size="sm" />
-          </q-td>
-        </template>
-        <template v-slot:body-cell-verAprendices="props">
-          <q-td :props="props">
-            <q-btn flat round color="primary" icon="visibility" @click="viewApprentices(props.row.id)" />
-          </q-td>
-        </template>
-      </Table>
-    </div>
+    <q-table
+      :rows="rows"
+      :columns="columns"
+      :filter="searchTerm"
+      row-key="id"
+      flat
+      bordered
+      :pagination="{ rowsPerPage: 5 }"
+    >
+      <template v-slot:body-cell-status="props">
+        <q-td :props="props" class="text-center">
+          <q-chip
+            :color="props.row.status === 'Activa' ? 'green' : 'red'"
+            text-color="white"
+            class="status-chip"
+          >
+            {{ props.row.status === 'Activa' ? 'Activa' : 'Inactiva' }}
+          </q-chip>
+        </q-td>
+      </template>
+      <template v-slot:body-cell-verAprendices="props">
+        <q-td :props="props" class="text-center">
+          <q-btn
+            flat
+            round
+            color="green"
+            icon="visibility"
+            @click="viewApprentices(props.row.id)"
+          />
+        </q-td>
+      </template>
+    </q-table>
   </div>
 </template>
 
 <style scoped>
-.input {
-  margin: 7px 0;
-  color: green;
-  border-color: green;
+.q-table {
+  background-color: white;
 }
 
-.divMain {
-  padding: 0 1.5%;
-  margin-top: 20px;
+.q-table th {
+  font-weight: bold;
+  font-size: 14px;
+  color: #000000;
+  background-color: #f5f5f5;
+}
+
+.q-table td {
+  font-size: 14px;
+  color: #000000;
+}
+
+.status-chip {
+  min-width: 80px;
+}
+
+:deep(.q-table__bottom) {
+  border-top: 1px solid #e0e0e0;
+}
+
+:deep(.q-table__container) {
+  border: 1px solid #e0e0e0;
+  border-radius: 4px;
 }
 </style>
