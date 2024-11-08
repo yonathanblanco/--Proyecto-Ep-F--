@@ -2,9 +2,7 @@
 import { ref, onBeforeMount } from "vue";
 import { useQuasar } from "quasar";
 import { getRepforaData } from "../services/apiRepfora";
-import Table from "../components/tables/tablestatus.vue";
 import Title from "../components/tittle/tittle.vue";
-import Modal from "../components/modal/modal.vue";
 import ButtonBack from '../components/buttons/buttonBack.vue';
 
 const fixed = ref(false);
@@ -30,7 +28,7 @@ const columns = ref([
     label: "NOMBRE FICHA",
     field: row => row.program?.name || "",
     sortable: true,
-    style: "width: 35%; padding-left: 10px;",
+    style: "width: 20%;  ",
   },
   {
     name: "ficheNumber",
@@ -61,11 +59,12 @@ const searchTerm = ref('');
 
 async function getFiches() {
   const storedAuth = localStorage.getItem('auth');
-const token = storedAuth ? JSON.parse(storedAuth) : null;
-console.log(token.token);
-  const res = await getData("/repfora/listFiche");
-  rows.value = res;
-  console.log(res);
+  const token = storedAuth ? JSON.parse(storedAuth) : null;
+  const res = await getRepforaData("/fiches");
+  rows.value = res.map((item, index) => ({
+    ...item,
+    index: index + 1
+  }));
 }
 
 function viewApprentices(ficheId) {
@@ -74,87 +73,87 @@ function viewApprentices(ficheId) {
 </script>
 
 <template>
-  <div class="q-gutter-md divMain">
-    <div>
+  <div class="q-pa-md">
+    <div class="q-mb-md">
       <ButtonBack />
       <Title title="FICHAS" />
     </div>
 
     <q-input
       v-model="searchTerm"
-      filled
+      outlined
+      dense
       placeholder="Ingrese el nombre o número de documento"
       class="q-mb-md"
+      style="max-width: 500px;"
     >
       <template v-slot:prepend>
         <q-icon name="search" />
       </template>
     </q-input>
 
-    <div>
-      <Table
-        :rows="rows"
-        :columns="columns"
-        :filter="searchTerm"
-      >
-        <template v-slot:body-cell-status="props">
-          <q-td :props="props" class="status-cell">
-            <div class="status-button" :class="{'active-status': props.row.status === 'Activa', 'inactive-status': props.row.status === 'Inactivo'}">
-              {{ props.row.status }}
-            </div>
-          </q-td>
-        </template>
-        <template v-slot:body-cell-verAprendices="props">
-          <q-td :props="props" class="view-apprentices-cell">
-            <q-icon name="visibility" color="green" size="32px" @click="viewApprentices(props.row.id)" />
-          </q-td>
-        </template>
-      </Table>
-    </div>
+    <q-table
+      :rows="rows"
+      :columns="columns"
+      :filter="searchTerm"
+      row-key="id"
+      flat
+      bordered
+      :pagination="{ rowsPerPage: 5 }"
+    >
+      <template v-slot:body-cell-status="props">
+        <q-td :props="props" class="text-center">
+          <q-chip
+            :color="props.row.status === 'Activa' ? 'green' : 'red'"
+            text-color="white"
+            class="status-chip"
+          >
+            {{ props.row.status === 'Activa' ? 'Activa' : 'Inactiva' }}
+          </q-chip>
+        </q-td>
+      </template>
+      <template v-slot:body-cell-verAprendices="props">
+        <q-td :props="props" class="text-center">
+          <q-btn
+            flat
+            round
+            color="green"
+            icon="visibility"
+            @click="viewApprentices(props.row.id)"
+          />
+        </q-td>
+      </template>
+    </q-table>
   </div>
 </template>
 
 <style scoped>
-.input {
-  margin: 7px 0;
-  color: green;
-  border-color: green;
+.q-table {
+  background-color: white;
 }
 
-.divMain {
-  padding: 0 1.5%;
-  margin-top: 20px;
-}
-
-.status-cell {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.status-button {
-  border-radius: 20px;
-  padding: 5px 15px;
-  font-size: 14px;
-  text-align: center;
+.q-table th {
   font-weight: bold;
+  font-size: 14px;
+  color: #000000;
+  background-color: #f5f5f5;
 }
 
-.active-status {
-  background-color: #28a745; /* Verde */
+.q-table td {
+  font-size: 14px;
+  color: #000000;
 }
 
-.inactive-status {
-  background-color: #dc3545; /* Rojo */
+.status-chip {
+  min-width: 80px;
 }
 
-.view-apprentices-cell {
-  display: flex;
-  justify-content: center;
-  align-items: center;
+:deep(.q-table__bottom) {
+  border-top: 1px solid #e0e0e0;
 }
 
-.q-icon {
-  cursor: pointer;
+:deep(.q-table__container) {
+  border: 1px solid #e0e0e0;
+  border-radius: 4px;
 }
 </style>
