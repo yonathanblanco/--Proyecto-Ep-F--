@@ -16,7 +16,7 @@ import assignmentImage from '../assets/img/modalidadImage.png';
 <template>
     <div class="q-pa-xl row items-center justify-center q-gutter-md contenedor">
         <div>
-            <CardComponent titles="REGISTROS" :imageSRC="logImage" to="/log" />
+            <CardComponent titles="REGISTROS" :imageSRC="logImage" to="/register" />
         </div>
         <div>
             <CardComponent titles="APRENDICES" :imageSRC="apprenticeImage" to="/apprentice" />

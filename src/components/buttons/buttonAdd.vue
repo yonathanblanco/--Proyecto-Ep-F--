@@ -12,7 +12,7 @@ const props = defineProps({
 </script>
 <template>
     <div class="divAgregar">
-        <q-btn @click="openAddModal" class="add-aprendiz-btn" icon="add_circle" label="agregar">
+        <q-btn @click="openAddModal" class="add-aprendiz-btn" icon="add_circle" label="CREAR">
         </q-btn>
     </div>
 </template>
@@ -34,7 +34,6 @@ const props = defineProps({
 .divAgregar {
     margin-top: 28px;
     display: flex;
-    justify-content: flex-end;
-    margin-right: 50px;
+    margin-left: 190px;
 }
 </style>
