@@ -26,7 +26,7 @@ import assignmentImage from '../assets/img/modalidadImage.png';
             <CardComponent titles="APRENDICES" :imageSRC="apprenticeImage" to="/apprentice" v-if="user?.role === 'ADMINISTRADOR'" />
         </div>
         <div>
-            <CardComponent titles="BITACORAS" :imageSRC="binnacleImage" to="/binnacle"  v-if="user?.role === 'INSTRUCTOR'" />
+            <CardComponent titles="BITACORAS" :imageSRC="binnacleImage" to="/binnacle"  v-if="user?.role === 'ADMINISTRADOR'" />
         </div>
 
         <div>
