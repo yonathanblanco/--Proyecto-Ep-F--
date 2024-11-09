@@ -221,7 +221,7 @@ async function loginInstructor(email, password,
     
     notifySuccessRequest("Inicio de sesión exitoso");
     // Redirige al home
-    $router.push("/homeInstructor");
+    $router.push("/home");
   } catch (error) {
     notifyErrorRequest("Contraseña/Email incorrecto");
   } 

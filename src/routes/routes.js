@@ -21,7 +21,7 @@ import AssignmentInstructor from '../views/AssignmentInstructor.vue';
 const routes = [
     {
         path: '/menu', component: Menu, children: [
-            { path: '/home', component: Home, meta: { requiresAuth: true, role: 'ADMINISTRADOR' } },
+            { path: '/home', component: Home, meta: { requiresAuth: true,  roles: ['ADMINISTRADOR', 'INSTRUCTOR'] } },
             { path: '/assigmentInstructor', component: AssignmentInstructor, meta: { requiresAuth: true, role: 'INSTRUCTOR' } },
             { path: '/apprentice', component: Apprentice, meta: { requiresAuth: true,  role: 'ADMINISTRADOR' } },
             { path: '/fiches', component: Fiches, meta: { requiresAuth: true, role: 'ADMINISTRADOR' } },
