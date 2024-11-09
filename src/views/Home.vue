@@ -30,15 +30,15 @@ import assignmentImage from '../assets/img/modalidadImage.png';
         </div>
 
         <div>
-            <CardComponent titles="FICHAS" :imageSRC="binnacleImage" to="/fiches"  v-if="user?.role === 'INSTRUCTOR'" />
+            <CardComponent titles="FICHAS" :imageSRC="binnacleImage" to="/fiches"  v-if="user?.role === 'ADMINISTRADOR' || user?.role === 'INSTRUCTOR' " />
         </div>
         
         <div>
-            <CardComponent titles="MODALIDADES" :imageSRC="modalityImage" to="/modality"  v-if="user?.role === 'ADMINISTRADOR'" />
+            <CardComponent titles="MODALIDADES" :imageSRC="modalityImage" to="/modality"  v-if="user?.role === 'ADMINISTRADOR' || user?.role === 'INSTRUCTOR'" />
         </div>
         
         <div>
-            <CardComponent titles="SEGUIMIENTOS" :imageSRC="followupImage" to="/followup"  v-if="user?.role === 'ADMINISTRADOR'" />
+            <CardComponent titles="SEGUIMIENTOS" :imageSRC="followupImage" to="/followup"  v-if="user?.role === 'ADMINISTRADOR' " />
         </div>
 
         <div>
