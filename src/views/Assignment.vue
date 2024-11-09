@@ -10,40 +10,13 @@ let alert = ref(false);
 
 const columns = ref([
     { name: "register", label: "Registro", field: "register" },
-    {
-        name: "followUpInstructor.name",
-        label: "Instructor Seguimiento",
-        field: "followUpInstructor.name",
-        align: 'center'
-    },
-    {
-        name: "technicalInstructor.name",
-        label: "Instructor Técnico",
-        field: "technicalInstructor.name",
-        align: 'center'
-    },
-    {
-        name: "projectInstructor.name",
-        label: "Instructor Proyecto",
-        field: "projectInstructor.name",
-        align: 'center'
-    },
-    {
-        name: "certificationdoc",
-        label: "Certificación Doc",
-        field: "certificationdoc",
-        align: 'center'
-    },
+    {name: "followUpInstructor.name", label: "Instructor Seguimiento", field: "followUpInstructor.name", align: 'center'},
+    {name: "technicalInstructor.name", label: "Instructor Técnico", field: "technicalInstructor.name", align: 'center'},
+    {name: "projectInstructor.name", label: "Instructor Proyecto", field: "projectInstructor.name", align: 'center'},
+    {name: "certificationdoc",label: "Certificación Doc",field: "certificationdoc",align: 'center'},
     { name: "judymentPhoto", label: "Foto", field: "judymentPhoto", align: 'center'},
-
     { name: "status", label: "Status", field: "status",align: 'center' },
-    {
-        name: "opciones",
-        required: true,
-        align: "center",
-        label: "Opciones",
-        align: 'center'
-    }
+    {name: "opciones", required: true, align: "center", label: "Opciones", align: 'center'}
 ]);
 async function getApprentices() {
   let res = await getData("assignment/listallassignment");

@@ -105,15 +105,6 @@
               </q-input>
             </q-card-section>
 
-            <!-- Olvidar contraseña -->
-            <q-card-section class="forgot-password text-center q-my-sm">
-  <router-link to="/forgotten-password" class="forgot-password">
-    ¿Olvidaste tu contraseña?
-  </router-link>
-</q-card-section>
-
-
-
             <!-- Botón de Login -->
             <q-card-section>
               <q-btn
@@ -127,6 +118,11 @@
                 @click="handleLogin"
                 required>
               </q-btn>
+            </q-card-section>
+
+            <!-- Olvidar contraseña -->
+            <q-card-section class="forgot-password text-center q-my-sm">
+              ¿Olvidaste tu contraseña?
             </q-card-section>
           </q-card>
 
