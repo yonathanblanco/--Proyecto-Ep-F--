@@ -5,7 +5,6 @@ import Assignment from '../views/Assignment.vue';
 import Binnacle from '../views/Binnacle.vue';
 import ForgottenPassword from '../views/ForgottenPassword.vue';
 import Home from '../views/Home.vue';
-import HomeInstructor from '../views/HomeInstructor.vue';
 import Log from '../views/Log.vue';
 import Login from '../views/Login.vue';
 import Modality from '../views/Modality.vue';
@@ -25,7 +24,6 @@ const routes = [
     {
         path: '/menu', component: Menu, children: [
             { path: '/home', component: Home, meta: { requiresAuth: true, role: 'ADMINISTRADOR' } },
-            { path: '/homeInstructor', component: HomeInstructor, meta: { requiresAuth: true, role: 'INSTRUCTOR' } },
             { path: '/assigmentInstructor', component: AssignmentInstructor, meta: { requiresAuth: true, role: 'INSTRUCTOR' } },
             { path: '/apprentice', component: Apprentice, meta: { requiresAuth: true,  role: 'ADMINISTRADOR' } },
             { path: '/fiches', component: Fiches, meta: { requiresAuth: true, role: 'ADMINISTRADOR' } },

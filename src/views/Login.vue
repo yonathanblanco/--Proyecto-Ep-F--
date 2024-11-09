@@ -208,12 +208,16 @@ async function loginAdmin(email, password, role) {
   }
 }
 
-async function loginInstructor(email, password) {
+async function loginInstructor(email, password,
+  
+
+) {
   try {
-    const res = await postRepforaData("/instructors/login", { email, password });
+    const res = await postRepforaData("/instructors/login", { email, password,role });
     
     // Guarda el token en Pinia
     useAuth.setToken(res.token);  
+    useAuth.setToken(role);
     // Guarda el email y rol en Pinia
     useAuth.setUserDetails({ email: res.email, role: 'INSTRUCTOR' });
     // Almacena el token en localStorage
