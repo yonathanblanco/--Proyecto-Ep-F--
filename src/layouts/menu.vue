@@ -37,45 +37,40 @@
       <!-- Opciones del menú, según el rol -->
       <q-item class="bodyMenu">
         <q-item-section>
+
           <buttonsMenu titles="INICIO" icon="list" to="/home" v-if="user?.role === 'ADMINISTRADOR' || user?.role === 'INSTRUCTOR'"></buttonsMenu>
-          <buttonsMenu titles="ASIGNACIONES" icon="history_edu" to="/assigmentInstructor"
-            v-if="user?.role === 'INSTRUCTOR'"></buttonsMenu>
-          <buttonsMenu titles="REGISTROS" icon="assignment" to="/register" v-if="user?.role === 'ADMINISTRADOR'">
+          <buttonsMenu titles=" MI ASIGNACIONES" icon="history_edu" to="/assigmentInstructor" v-if="user?.role === 'INSTRUCTOR'"></buttonsMenu>
+          <buttonsMenu titles="BITÁCORAS" icon="list_alt" to="/binnacleInstructor" v-if="user?.role === 'INSTRUCTOR'">
           </buttonsMenu>
-          <buttonsMenu titles="FICHAS" icon="people" to="/fiches" v-if="user?.role === 'ADMINISTRADOR'"></buttonsMenu>
+          <buttonsMenu titles="SEGUIMIENTOS" icon="calendar_today" to="/followupInstructor" v-if="user?.role === 'INSTRUCTOR'">
+          </buttonsMenu>
+          <buttonsMenu titles="CERTIFICACIONES" icon="analytics" to="/certificationInstructor" v-if="user?.role === 'INSTRUCTOR'">
+          </buttonsMenu>
+          <buttonsMenu titles="HORAS" icon="analytics" to="/recordHoursInstructor" v-if="user?.role === 'INSTRUCTOR'">
+          </buttonsMenu>
           <buttonsMenu titles="APRENDICES" icon="school" to="/apprentice" v-if="user?.role === 'ADMINISTRADOR'">
           </buttonsMenu>
-          <buttonsMenu titles="BITÁCORAS" icon="list_alt" to="/binnacle"
-          v-if="user?.role === 'ADMINISTRADOR'">
+          <buttonsMenu titles="BITÁCORAS" icon="list_alt" to="/binnacle" v-if="user?.role === 'ADMINISTRADOR'">
           </buttonsMenu>
-          <buttonsMenu titles="BITÁCORAS" icon="list_alt" to="/binnacleInstructor"
-          v-if="user?.role === 'INSTRUCTOR'">
-          </buttonsMenu>
+          <buttonsMenu titles="FICHAS" icon="people" to="/fiches" v-if="user?.role === 'ADMINISTRADOR'"></buttonsMenu>
           <buttonsMenu titles="MODALIDAD" icon="info" to="/modality" v-if="user?.role === 'ADMINISTRADOR'">
           </buttonsMenu>
-          <buttonsMenu titles="CERTIFICACIONES" icon="analytics" to="/certification" v-if="user?.role === 'ADMINISTRADOR'">
-          </buttonsMenu>
-          <buttonsMenu titles="SEGUIMIENTOS" icon="calendar_today" to="/followup"
-          v-if="user?.role === 'ADMINISTRADOR'">
-          </buttonsMenu>
-          <buttonsMenu titles="SEGUIMIENTOS" icon="calendar_today" to="/followupInstructor"
-          v-if="user?.role === 'INSTRUCTOR'">
+          <buttonsMenu titles="SEGUIMIENTOS" icon="calendar_today" to="/followup" v-if="user?.role === 'ADMINISTRADOR'">
           </buttonsMenu>
           <buttonsMenu titles="ASIGNACIONES" icon="history_edu" to="/assignment" v-if="user?.role === 'ADMINISTRADOR'">
           </buttonsMenu>
-          <buttonsMenu titles="ASIGNACIONES" icon="history_edu" to="/assigmentInstructor" v-if="user?.role === 'INSTRUCTOR'">
+          <buttonsMenu titles="REGISTROS" icon="assignment" to="/register" v-if="user?.role === 'ADMINISTRADOR'">
+          </buttonsMenu>
+          <buttonsMenu titles="CERTIFICACIONES" icon="analytics" to="/certification" v-if="user?.role === 'ADMINISTRADOR'">
+          </buttonsMenu>
+          <buttonsMenu titles="HORAS" icon="analytics" to="/recordHours" v-if="user?.role === 'ADMINISTRADOR'">
           </buttonsMenu>
           <!-- <buttonsMenu titles="INFORME" icon="calculate" to="/report" v-if="user?.role === 'ADMINISTRADOR'">
           </buttonsMenu> -->
           <buttonsMenu titles="CONSULTA" icon="analytics" to="/consultor" v-if="user?.role === 'CONSULTOR'">
           </buttonsMenu>
-          <buttonsMenu titles="CERTIFICACIONES" icon="analytics" to="/certificationInstructor"
-            v-if="user?.role === 'INSTRUCTOR'">
-          </buttonsMenu>
-          <buttonsMenu titles="HORAS" icon="analytics" to="/recordHours" v-if="user?.role === 'ADMINISTRADOR'">
-          </buttonsMenu>
-          <buttonsMenu titles="HORAS" icon="analytics" to="/recordHoursInstructor" v-if="user?.role === 'INSTRUCTOR'">
-          </buttonsMenu>
+
+
 
         </q-item-section>
       </q-item>
