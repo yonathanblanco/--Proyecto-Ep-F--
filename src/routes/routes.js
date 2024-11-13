@@ -19,7 +19,6 @@ import BinnacleInstructor from '../views/BinnacleInstructor.vue';
 import FollowupInstructor from '../views/FollowupInstructor.vue';
 import Certification from '../views/Certification.vue';
 import CertificationInstructor from '../views/CertificationInstructor.vue';
-import ModalityInstructor from '../views/ModalityInstructor.vue';
 
 //report y followup corregir 
 
@@ -41,8 +40,7 @@ const routes = [
             { path: '/binnacleInstructor', component: BinnacleInstructor, meta: { requiresAuth: true, role: 'INSTRUCTOR' } },
             { path: '/followupInstructor', component: FollowupInstructor, meta: { requiresAuth: true, role: 'INSTRUCTOR' } },
             { path: '/certification', component: Certification, meta: { requiresAuth: true, role: 'ADMINISTRADOR' } },
-            { path: '/certificationInstructor', component: CertificationInstructor, meta: { requiresAuth: true, role: 'INSTRUCTOR' } },
-            { path: '/modalityInstructor', component: ModalityInstructor, meta: { requiresAuth: true, role: 'INSTRUCTOR' } }
+            { path: '/certificationInstructor', component: CertificationInstructor, meta: { requiresAuth: true, role: 'INSTRUCTOR' } }
         ]
     },
     { path: '/', component: Login },

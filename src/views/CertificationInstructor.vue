@@ -1,6 +1,6 @@
 <template>
     <div>
-        <Title title="CERTIFICACIONES INSTRUCTOR" />
+        <Title title="CERTIFICACIONES" />
     </div>  
     
     </template>
