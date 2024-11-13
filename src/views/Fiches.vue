@@ -65,7 +65,7 @@ async function getFiches() {
     ...item,
     index: index + 1
   }));
-}
+};
 
 function viewApprentices(ficheId) {
   console.log("Viewing apprentices for fiche:", ficheId);

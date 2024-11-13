@@ -34,8 +34,10 @@ const props = defineProps({
 }
 
 .vertical-line {
-  width: 80%; /* Grosor de la línea */
-  height: 4px; /* Altura de la línea */
+  width: 80%;
+  /* Grosor de la línea */
+  height: 4px;
+  /* Altura de la línea */
   background-color: #2e7d32;
   margin-top: 20px;
 }

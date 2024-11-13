@@ -14,20 +14,8 @@
             <q-card-section>
               <div class="form-group">
                 <label for="rol" class="form-label">Seleccione un rol</label>
-                <q-select
-                  id="rol"
-                  v-model="role"
-                  @change="handleRoleChange"
-                  class="input-field"
-                  :options="rolesOptions"
-                  emit-value
-                  map-options
-                  outlined
-                  dense
-                  label="Seleccione un rol"
-                  use-input
-                  input-debounce="300"
-                >
+                <q-select id="rol" v-model="role" @change="handleRoleChange" class="input-field" :options="rolesOptions"
+                  emit-value map-options outlined dense label="Seleccione un rol" use-input input-debounce="300">
                   <template v-slot:prepend>
                     <q-icon name="list" color="green-8" />
                   </template>
@@ -35,70 +23,37 @@
               </div>
 
               <!-- Mostrar Email y Contraseña solo si es administrador o instructor -->
-              <q-input 
-                v-if="isRole('ETAPA PRODUCTIVA') || isRole('Instructor')"
-                dense 
-                label-color="green-7" 
-                color="#38803a" 
-                outlined 
-                class="q-mt-md input" 
-                v-model="email"
-                :error="!!emailError" 
-                :error-message="emailError" 
-                label="Email">
+              <q-input v-if="isRole('ETAPA PRODUCTIVA') || isRole('Instructor')" dense label-color="green-7"
+                color="#38803a" outlined class="q-mt-md input" v-model="email" :error="!!emailError"
+                :error-message="emailError" label="Email">
                 <template v-slot:prepend>
                   <q-icon name="mail" color="green-8" />
                 </template>
               </q-input>
 
-              <q-input 
-                v-if="isRole('ETAPA PRODUCTIVA') || isRole('Instructor')"
-                dense 
-                label-color="green-7" 
-                color="#38803a" 
-                outlined 
-                class="q-mt-xs input" 
-                v-model="password" 
-                :type="passwordVisible ? 'text' : 'password'" 
-                :error="!!passwordError" 
-                :error-message="passwordError" 
+              <q-input v-if="isRole('ETAPA PRODUCTIVA') || isRole('Instructor')" dense label-color="green-7"
+                color="#38803a" outlined class="q-mt-xs input" v-model="password"
+                :type="passwordVisible ? 'text' : 'password'" :error="!!passwordError" :error-message="passwordError"
                 label="Password">
                 <template v-slot:prepend>
                   <q-icon name="lock" color="green-8" />
                 </template>
                 <template v-slot:append>
-                  <q-icon :name="passwordVisible ? 'visibility' : 'visibility_off'"
-                          class="cursor-pointer" 
-                          @click="passwordVisible = !passwordVisible"/>
+                  <q-icon :name="passwordVisible ? 'visibility' : 'visibility_off'" class="cursor-pointer"
+                    @click="passwordVisible = !passwordVisible" />
                 </template>
               </q-input>
 
               <!-- Mostrar Documento y Email solo si es consultor -->
-              <q-input 
-                v-if="isRole('consultor')"
-                dense 
-                label-color="green-7" 
-                color="#38803a" 
-                outlined 
-                class="q-mt-md input" 
-                v-model="documento"
-                label="Documento">
+              <q-input v-if="isRole('consultor')" dense label-color="green-7" color="#38803a" outlined
+                class="q-mt-md input" v-model="documento" label="Documento">
                 <template v-slot:prepend>
                   <q-icon name="assignment" color="green-8" />
                 </template>
               </q-input>
 
-              <q-input 
-                v-if="isRole('consultor')"
-                dense 
-                label-color="green-7" 
-                color="#38803a" 
-                outlined 
-                class="q-mt-xs input" 
-                v-model="email"
-                :error="!!emailError" 
-                :error-message="emailError" 
-                label="Email">
+              <q-input v-if="isRole('consultor')" dense label-color="green-7" color="#38803a" outlined
+                class="q-mt-xs input" v-model="email" :error="!!emailError" :error-message="emailError" label="Email">
                 <template v-slot:prepend>
                   <q-icon name="mail" color="green-8" />
                 </template>
@@ -107,16 +62,8 @@
 
             <!-- Botón de Login -->
             <q-card-section>
-              <q-btn
-                style="border-radius: 12px;" 
-                color="#38803a" 
-                rounded 
-                size="md" 
-                label="Iniciar Sesión" 
-                no-caps 
-                class="full-width btn-login" 
-                @click="handleLogin"
-                required>
+              <q-btn style="border-radius: 12px;" color="#38803a" rounded size="md" label="Iniciar Sesión" no-caps
+                class="full-width btn-login" @click="handleLogin" required>
               </q-btn>
             </q-card-section>
 
@@ -128,9 +75,9 @@
 
           <q-footer class="footer-custom">
             <q-toolbar class="justify-center">
-            <q-toolbar-titles class="text-center">
-              <div class="text-bold tittleFooter">REPFORA - Sena 2024 Todos los derechos reservados </div>
-            </q-toolbar-titles>
+              <q-toolbar-titles class="text-center">
+                <div class="text-bold tittleFooter">REPFORA - Sena 2024 Todos los derechos reservados </div>
+              </q-toolbar-titles>
             </q-toolbar>
           </q-footer>
         </q-page>
@@ -169,7 +116,7 @@ const validateForm = () => {
     notifyErrorRequest("Por favor, selecciona un rol.");
     return false;
   }
-  
+
   if ((isRole('ETAPA PRODUCTIVA') || isRole('Instructor')) && (!email.value || !password.value)) {
     notifyErrorRequest("Por favor, completa todos los campos obligatorios.");
     return false;
@@ -188,14 +135,14 @@ const isRole = (roles) => role.value === roles;
 async function loginAdmin(email, password, role) {
   try {
     const res = await postData("http://89.116.49.65:4500/api/users/login", { email, password, role });
-    
+
     // Guarda el token en Pinia
-    useAuth.setToken(res.token);  
+    useAuth.setToken(res.token);
     // Guarda el email y rol en Pinia
     useAuth.setUserDetails({ email: res.email, role: 'ADMINISTRADOR' });
     // Almacena el token en localStorage
     localStorage.setItem('auth', JSON.stringify({ token: res.token }));
-    
+
     notifySuccessRequest("Inicio de sesión exitoso");
     // Redirige al home
     $router.push("/home");
@@ -205,26 +152,26 @@ async function loginAdmin(email, password, role) {
 }
 
 async function loginInstructor(email, password,
-  
+
 
 ) {
   try {
-    const res = await postRepforaData("/instructors/login", { email, password,role });
-    
+    const res = await postRepforaData("/instructors/login", { email, password, role });
+
     // Guarda el token en Pinia
-    useAuth.setToken(res.token);  
+    useAuth.setToken(res.token);
     useAuth.setToken(role);
     // Guarda el email y rol en Pinia
     useAuth.setUserDetails({ email: res.email, role: 'INSTRUCTOR' });
     // Almacena el token en localStorage
     localStorage.setItem('auth', JSON.stringify({ token: res.token }));
-    
+
     notifySuccessRequest("Inicio de sesión exitoso");
     // Redirige al home
     $router.push("/home");
   } catch (error) {
     notifyErrorRequest("Contraseña/Email incorrecto");
-  } 
+  }
 }
 
 async function loginConsultor(email, documento) {
@@ -265,12 +212,12 @@ async function handleLogin() {
   justify-content: center;
   position: relative;
   background-color: #2e7d32;
-  padding: 10px 20px; 
+  padding: 10px 20px;
   border-radius: 10px 10px 0 0;
 }
 
 .imgSena {
-  max-width: 200px; 
+  max-width: 200px;
   margin-bottom: 10px;
 }
 
@@ -322,15 +269,19 @@ async function handleLogin() {
 }
 
 .forgot-password {
-  text-decoration: none; /* Elimina el subrayado */
+  text-decoration: none;
+  /* Elimina el subrayado */
   font-size: 0.9rem;
   font-weight: bold;
-  color: #2e7d32; /* Color verde */
-  transition: color 0.3s; /* Transición suave para el hover */
+  color: #2e7d32;
+  /* Color verde */
+  transition: color 0.3s;
+  /* Transición suave para el hover */
 }
 
 .forgot-password:hover {
-  color: #4caf50; /* Color verde más claro en hover */
+  color: #4caf50;
+  /* Color verde más claro en hover */
 }
 
 
