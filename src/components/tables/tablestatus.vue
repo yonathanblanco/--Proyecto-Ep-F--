@@ -91,10 +91,12 @@ const props = defineProps({
 /* Estilo general de la tabla */
 .styled-table {
   font-family: 'Arial', sans-serif;
-  font-size: 40px; /* Tamaño de texto más grande */
+  font-size: 40px;
+  /* Tamaño de texto más grande */
   color: #333;
   border-collapse: collapse;
-  font-weight: bold; /* Texto en negrita */
+  font-weight: bold;
+  /* Texto en negrita */
 }
 
 /* Estilos de las celdas */
@@ -102,12 +104,14 @@ const props = defineProps({
   padding: 12px 8px;
   text-align: center;
   vertical-align: middle;
-  font-weight: bold; /* Texto en negrita */
+  font-weight: bold;
+  /* Texto en negrita */
 }
 
 /* Estilos de botones */
 .q-btn {
-  font-size: 15px; /* Tamaño más grande para los íconos */
+  font-size: 15px;
+  /* Tamaño más grande para los íconos */
   color: #fff;
   border-radius: 5px;
   transition: background-color 0.3s ease;

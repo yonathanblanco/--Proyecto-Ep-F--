@@ -1,6 +1,6 @@
 <template>
     <div>
-        <Title title="INFORME DE HORAS" />
+        <Title title="CERTIFICACIONES" />
     </div>  
     
     </template>

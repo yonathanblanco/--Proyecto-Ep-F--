@@ -10,11 +10,11 @@ const props = defineProps({
   },
   entityName: {
     type: String,
-    required: true 
+    required: true
   },
   iconName: {
     type: String,
-    required: true 
+    required: true
   }
 });
 
@@ -70,6 +70,4 @@ function closeModal() {
   color: #2E7D32;
   margin-left: 10px;
 }
-
-
 </style>

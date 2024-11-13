@@ -49,13 +49,14 @@ const props = defineProps({
 .cards {
     display: flex;
     flex-direction: column;
-    border: 1px solid #38803a; /* Cambiar borde a color verde */
+    border: 1px solid #38803a;
+    /* Cambiar borde a color verde */
     overflow: hidden;
     transition: transform 0.3s ease, box-shadow 0.3s ease;
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     margin: 10px;
-    width: 450px;
+    width: 480px;
 }
 
 .titles {
@@ -90,7 +91,8 @@ const props = defineProps({
 
 .divider {
     height: 3px;
-    background-color: #76b879; /* Línea gris sutil */
+    background-color: #76b879;
+    /* Línea gris sutil */
     margin: 0 10px;
 }
 </style>

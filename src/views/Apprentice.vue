@@ -146,126 +146,63 @@ async function deactivate(id) {
     </div>
 
     <div>
-      <Table
-        :rows="rows"
-        :columns="columns"
-        :openEditModal="edit"
-        :activate="activate"
-        :deactivate="deactivate"
-      />
+      <Table :rows="rows" :columns="columns" :openEditModal="edit" :activate="activate" :deactivate="deactivate" />
     </div>
 
-    <Modal
-      :fixed="fixed"
-      :isEditing="isEditing"
-      entityName="Aprendices"
-      iconName="school"
-      @update:fixed="(val) => (fixed = val)"
-    >
+    <Modal :fixed="fixed" :isEditing="isEditing" entityName="Aprendices" iconName="school"
+      @update:fixed="(val) => (fixed = val)">
       <template v-slot:modal-content>
-        <q-input
-          filled
-          v-model="tpDocument"
-          label="Tipo de Documento"
-          class="input thin-input"
-          label-color="green-9"
-        >
+        <q-input filled v-model="tpDocument" label="Tipo de Documento" class="input thin-input" label-color="green-9">
           <template v-slot:prepend>
             <q-icon color="green-10" name="assignment" />
           </template>
         </q-input>
 
-        <q-input
-          filled
-          v-model="numDocument"
-          label="Num. Documento"
-          class="input thin-input"
-          label-color="green-9"
-        >
+        <q-input filled v-model="numDocument" label="Num. Documento" class="input thin-input" label-color="green-9">
           <template v-slot:prepend>
             <q-icon color="green-10" name="confirmation_number" />
           </template>
         </q-input>
 
-        <q-input
-          filled
-          v-model="firstName"
-          label="Nombre"
-          class="input thin-input"
-          label-color="green-9"
-        >
+        <q-input filled v-model="firstName" label="Nombre" class="input thin-input" label-color="green-9">
           <template v-slot:prepend>
             <q-icon color="green-10" name="person" />
           </template>
         </q-input>
 
-        <q-input
-          filled
-          v-model="lastName"
-          label="Apellido"
-          class="input thin-input"
-          label-color="green-9"
-        >
+        <q-input filled v-model="lastName" label="Apellido" class="input thin-input" label-color="green-9">
           <template v-slot:prepend>
             <q-icon color="green-10" name="person_outline" />
           </template>
         </q-input>
 
-        <q-input
-          filled
-          v-model="phone"
-          label="Teléfono"
-          class="input thin-input"
-          label-color="green-9"
-        >
+        <q-input filled v-model="phone" label="Teléfono" class="input thin-input" label-color="green-9">
           <template v-slot:prepend>
             <q-icon color="green-10" name="phone" />
           </template>
         </q-input>
 
-        <q-input
-          filled
-          v-model="email"
-          label="Email Personal"
-          class="input thin-input"
-          label-color="green-9"
-        >
+        <q-input filled v-model="email" label="Email Personal" class="input thin-input" label-color="green-9">
           <template v-slot:prepend>
             <q-icon color="green-10" name="email" />
           </template>
         </q-input>
 
-        <q-input
-          filled
-          v-model="emailInstitucional"
-          label="Email Institucional"
-          class="input thin-input"
-          label-color="green-9"
-        >
+        <q-input filled v-model="emailInstitucional" label="Email Institucional" class="input thin-input"
+          label-color="green-9">
           <template v-slot:prepend>
             <q-icon color="green-10" name="email" />
           </template>
         </q-input>
 
-        <q-input
-          filled
-          v-model="modality"
-          label="Modalidad Epata Productiva"
-          class="input thin-input"
-          label-color="green-9"
-        >
+        <q-input filled v-model="modality" label="Modalidad Epata Productiva" class="input thin-input"
+          label-color="green-9">
           <template v-slot:prepend>
             <q-icon color="green-10" name="book" />
           </template>
         </q-input>
 
-        <q-input
-          filled
-          v-model="fiche"
-          label="Ficha"
-          class="input thin-input"
-          label-color="green-9"
-        >
+        <q-input filled v-model="fiche" label="Ficha" class="input thin-input" label-color="green-9">
           <template v-slot:prepend>
             <q-icon color="green-10" name="note" />
           </template>
