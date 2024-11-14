@@ -1,16 +1,18 @@
 <script setup>
 import { ref, onBeforeMount } from "vue";
-import { format, useQuasar } from "quasar";
+import { useQuasar } from "quasar";
 import { getData, putData } from "../services/apiClient";
-import Table from "../components/tables/tablestatus.vue";
+import Table from "../components/tables/TableRegister.vue";
 import Title from "../components/tittle/tittle.vue";
 import ButtonBack from "../components/buttons/buttonBack.vue";
-import { QDialog, QCard, QCardSection, QBtn, QInput } from 'quasar';
+import { QDialog, QCard, QCardSection, QBtn, QInput, QSelect, QRadio } from 'quasar';
 
 const fixed = ref(false);
 const isEditing = ref(false);
 const $q = useQuasar();
 const showModal = ref(false);
+const searchText = ref('');
+const searchType = ref('apprentice');
 
 onBeforeMount(() => {
   getApprentices();
@@ -28,7 +30,7 @@ const columns = ref([
   {
     name: "apprentice",
     align: "center",
-    label: "NOMBRE APRENDIZ / APRENDICES",
+    label: "NOMBRE APRENDIZ",
     field: row => `${row.firstname} ${row.lastname}`,
   },
   {
@@ -42,13 +44,6 @@ const columns = ref([
     align: "center",
     label: "MODALIDAD",
     field: (row) => row.modality?.name || "MODALIDAD",
-  },
-  {
-    name: "assignment",
-    align: "center",
-    label: "ASIGNACIÓN",
-    field: (row) => "<icono_buscar>", // Aquí va el ícono de búsqueda.
-    format: () => `<q-icon name="search" color="green" />`, // Renderiza el ícono de búsqueda.
   },
   {
     name: "startDate",
@@ -65,79 +60,25 @@ const columns = ref([
     format: (val) => val ? new Date(val).toLocaleDateString() : "00/00/00",
   },
   {
-    name: "details",
-    align: "center",
-    label: "DETALLES",
-    field: "details",
-    format: () => `<q-icon name="visibility" color="green" />`, // Ícono de detalles.
-  },
-  {
-    name: "hours",
-    align: "center",
-    label: "REGISTRO HORAS",
-    field: "hours",
-    format: () => `<q-icon name="visibility" color="green" />`, // Ícono de horas.
-  },
-  {
     name: "status",
     align: "center",
     label: "ESTADO",
     field: "status",
-    format: (val) => val === 1 
-      ? '<q-badge color="green" label="Activo" />' 
+    format: (val) => val === 1
+      ? '<q-badge color="green" label="Activo" />'
       : '<q-badge color="red" label="Inactivo" />',
   },
   {
     name: "opciones",
     align: "center",
     label: "OPCIONES",
-    field: "opciones",
-    format: () => `
-      <q-icon name="edit" color="green" /> 
-      <q-icon name="check" color="red" />`,
-  },
+    field: "opciones"
+  }
+
 ]);
 
-
 const rows = ref([]);
-
-async function getApprentices() {
-  const storedAuth = localStorage.getItem("auth");
-  const token = storedAuth ? JSON.parse(storedAuth) : null;
-  console.log(token.token);
-  const res = await getData("apprentice/listallapprentice");
-  rows.value = res;
-  console.log(res);
-  rows.value = res.map((item, index) => ({
-    ...item,
-    index: index + 1
-  }));
-}
-
-function openAddModal() {
-  showModal.value = true;
-}
-
-function closeAddModal() {
-  showModal.value = false;
-}
-
-function edit(row) {
-  fixed.value = true;
-  isEditing.value = true;
-}
-
-async function activate(id) {
-  const res = await putData("apprentice/enableapprentice/${id}");
-  console.log(res);
-  await getApprentices();
-}
-
-async function deactivate(id) {
-  const res = await putData("apprentice/disableapprentice/${id}");
-  console.log(res);
-  await getApprentices();
-}
+const selectedModality = ref(null);
 
 const modalidades = [
   'PASANTÍA',
@@ -151,94 +92,218 @@ const modalidades = [
   'MONITORIAS'
 ];
 
+async function getApprentices() {
+  try {
+    const storedAuth = localStorage.getItem("auth");
+    const token = storedAuth ? JSON.parse(storedAuth) : null;
+    const res = await getData("apprentice/listallapprentice");
+    rows.value = res.map((item, index) => ({
+      ...item,
+      index: index + 1
+    }));
+  } catch (error) {
+    console.error('Error fetching apprentices:', error);
+    $q.notify({
+      type: 'negative',
+      message: 'Error al cargar los aprendices'
+    });
+  }
+}
+
+function openAddModal() {
+  selectedModality.value = null;
+  showModal.value = true;
+}
+
+function closeAddModal() {
+  showModal.value = false;
+  selectedModality.value = null;
+}
+
+async function saveModality() {
+  if (!selectedModality.value) {
+    $q.notify({
+      type: 'warning',
+      message: 'Por favor seleccione una modalidad'
+    });
+    return;
+  }
+
+  try {
+    // Aquí deberías hacer la llamada a tu API para guardar la modalidad
+    await putData('apprentice/savemodality', {
+      modality: selectedModality.value
+    });
+
+    $q.notify({
+      type: 'positive',
+      message: 'Modalidad guardada correctamente'
+    });
+
+    closeAddModal();
+    await getApprentices();
+  } catch (error) {
+    console.error('Error saving modality:', error);
+    $q.notify({
+      type: 'negative',
+      message: 'Error al guardar la modalidad'
+    });
+  }
+}
+
+async function activate(id) {
+  try {
+    await putData(`apprentice/enableapprentice/${id}`);
+    await getApprentices();
+    $q.notify({
+      type: 'positive',
+      message: 'Aprendiz activado correctamente'
+    });
+  } catch (error) {
+    console.error('Error activating apprentice:', error);
+    $q.notify({
+      type: 'negative',
+      message: 'Error al activar el aprendiz'
+    });
+  }
+}
+
+async function deactivate(id) {
+  try {
+    await putData(`apprentice/disableapprentice/${id}`);
+    await getApprentices();
+    $q.notify({
+      type: 'positive',
+      message: 'Aprendiz desactivado correctamente'
+    });
+  } catch (error) {
+    console.error('Error deactivating apprentice:', error);
+    $q.notify({
+      type: 'negative',
+      message: 'Error al desactivar el aprendiz'
+    });
+  }
+}
+
+function edit(row) {
+  fixed.value = true;
+  isEditing.value = true;
+  // Aquí puedes agregar la lógica para editar el aprendiz
+}
 </script>
 
 <template>
   <div class="q-gutter-md divMain">
+    
     <div>
-      <ButtonBack />
-      <Title title="REGISTROS EP" />
-      <!-- Botón CREAR -->
+    <ButtonBack />
+    <Title title="REGISTROS EP" />
+    </div>
+    <!-- Filtros y búsqueda -->
+    <div class="row items-center justify-between q-mb-md">
       <div class="divAgregar">
-        <q-btn @click="openAddModal" class="add-aprendiz-btn" icon="add_circle" label="CREAR"></q-btn>
+        <q-btn @click="openAddModal" class="add-aprendiz-btn" icon="add_circle" label="CREAR" />
+      </div>
+
+      <div class="row items-center q-gutter-md filter-container">
+        <div class="text-subtitle2 filter-label">Realizar filtro por:</div>
+
+        <!-- Radio buttons -->
+        <q-radio v-model="searchType" val="file" label="Ficha" color="green-10" class="filter-radio"
+          label-color="#2E7D32" />
+        <q-radio v-model="searchType" val="apprentice" label="Aprendiz" color="green-10" class="filter-radio"
+          label-color="#2E7D32" />
+
+        <!-- Input field -->
+        <q-input v-model="searchText" outlined dense placeholder="Ingrese el nombre o número de documento"
+          class="filter-input q-ml-sm" style="width: 300px; color: #2E7D32; --q-color-focus: #2E7D32;" />
       </div>
     </div>
 
     <!-- Tabla -->
     <div>
-      <Table
-        :rows="rows"
-        :columns="columns"
-        :openEditModal="edit"
-        :activate="activate"
-        :deactivate="deactivate"
-      />
+      <Table :rows="rows" :columns="columns" :openEditModal="edit" :activate="activate" :deactivate="deactivate" />
     </div>
 
     <!-- Modal -->
     <q-dialog v-model="showModal" persistent>
-  <q-card>
-    <!-- Sección de encabezado con fondo verde oscuro y texto blanco -->
-    <q-card-section class="text-h6 text-center" style="background-color: #2E7D32; color: white;">
-      SELECCIONE MODALIDAD
-    </q-card-section>
+      <q-card style="min-width: 350px">
+        <q-card-section class="text-h6 text-center" style="background-color: #2E7D32; color: white;">
+          SELECCIONE MODALIDAD
+        </q-card-section>
 
-    <!-- Sección de entrada de texto -->
-    <q-card-section>
-      <q-select
-        filled
-        label="Nombre de la modalidad"
-        :options="modalidades"
-        class="q-mt-md"
-      />
-    </q-card-section>
+        <q-card-section class="q-pt-md">
+          <q-select v-model="selectedModality" :options="modalidades" filled label="Nombre de la modalidad"
+            class="q-mt-md" />
+        </q-card-section>
 
-    <!-- Sección de botones alineados al centro -->
-    <q-card-section align="center">
-      <q-btn label="Guardar" icon="save" @click="closeAddModal" style="background-color: #2E7D32; color: white;"/>
-      <q-btn label="Cerrar" color="grey" outline icon="close" @click="closeAddModal" class="q-ml-sm" />
-    </q-card-section>
-  </q-card>
-</q-dialog>
-
+        <q-card-section align="center" class="q-gutter-sm">
+          <q-btn label="Guardar" icon="save" color="green" @click="saveModality" />
+          <q-btn label="Cerrar" icon="close" color="grey" outline @click="closeAddModal" class="q-ml-sm" />
+        </q-card-section>
+      </q-card>
+    </q-dialog>
   </div>
 </template>
- 
+
 <style scoped>
-/* Estilos del botón CREAR */
 .add-aprendiz-btn {
-    background-color: #2E7D32;
-    color: #ffffff;
-    font-size: 16px;
-    font-weight: bold;
-    border-radius: 25px;
-    padding: 10px 15px;
-    transition: all 0.3s ease;
-    box-shadow: 0 5px 9px rgba(138, 138, 138, 0.308);
-    margin-bottom: 15px;
+  background-color: #2E7D32;
+  color: #ffffff;
+  font-size: 16px;
+  font-weight: bold;
+  border-radius: 25px;
+  padding: 10px 15px;
+  transition: all 0.3s ease;
+  box-shadow: 0 5px 9px rgba(138, 138, 138, 0.308);
+  margin-bottom: 15px;
 }
 
 .divAgregar {
-    margin-top: 28px;
-    display: flex;
-    margin-left: 190px;
+  margin-top: 28px;
+  display: flex;
+  margin-left: 190px;
 }
 
-/* Estilos del modal */
 .text-h6 {
-    font-size: 18px;
-    font-weight: bold;
-    
+  font-size: 18px;
+  font-weight: bold;
 }
 
 .q-card {
-    max-width: 400px;
-    padding: 16px;
+  max-width: 400px;
+  padding: 16px;
 }
 
 .q-mt-md {
-    margin-top: 1em;
+  margin-top: 1em;
 }
 
+.filter-container{
+  margin-right: 200px
+}
 
+.search-container {
+  background-color: white;
+  padding: 16px;
+  border-radius: 8px;
+  box-shadow: 0 1px 5px rgba(0, 0, 0, 0.1);
+}
+
+.filter-label {
+  font-weight: bold;
+  color: #2E7D32;
+}
+
+.filter-radio {
+  color: #2E7D32 !important; /* Importante para asegurar el estilo */
+}
+
+.filter-input .q-field__control {
+  color: #2E7D32 !important;
+}
+
+.filter-input .q-field__control .q-field__focus-ring {
+  border-color: #2E7D32 !important;
+}
 </style>
