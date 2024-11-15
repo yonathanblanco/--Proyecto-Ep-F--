@@ -63,7 +63,11 @@
             <!-- Botón de Login -->
             <q-card-section>
               <q-btn style="border-radius: 12px;" color="#38803a" rounded size="md" label="Iniciar Sesión" no-caps
-                class="full-width btn-login" @click="handleLogin" required>
+                class="full-width btn-login" @click="handleLogin" :loading="loading"
+                :disable="loading" required>
+                <template v-if="loading" v-slot:loading>
+                  <q-spinner color="white" size="20px" />
+                </template>
               </q-btn>
             </q-card-section>
 
@@ -104,6 +108,7 @@ const password = ref("");
 const documento = ref("");
 const role = ref("");
 const passwordVisible = ref(false);
+const loading = ref(false)
 
 const rolesOptions = ref([
   { value: 'ETAPA PRODUCTIVA', label: 'Administrador' },
@@ -185,16 +190,20 @@ async function loginConsultor(email, documento) {
 }
 
 async function handleLogin() {
-  if (!validateForm()) {
-    return; // No continuar si la validación falla
-  }
+  if (!validateForm()) return;
 
-  if (isRole('ETAPA PRODUCTIVA')) {
-    await loginAdmin(email.value, password.value, role.value);
-  } else if (isRole('Instructor')) {
-    await loginInstructor(email.value, password.value);
-  } else if (isRole('consultor')) {
-    await loginConsultor(email.value, documento.value);
+  loading.value = true; // Activa el loading antes de la solicitud
+
+  try {
+    if (isRole('ETAPA PRODUCTIVA')) {
+      await loginAdmin(email.value, password.value, role.value);
+    } else if (isRole('Instructor')) {
+      await loginInstructor(email.value, password.value);
+    } else if (isRole('consultor')) {
+      await loginConsultor(email.value, documento.value);
+    }
+  } finally {
+    loading.value = false; // Desactiva el loading después de la solicitud
   }
 }
 </script>
