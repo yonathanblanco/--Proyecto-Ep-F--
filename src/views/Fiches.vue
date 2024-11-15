@@ -99,7 +99,7 @@ function viewApprentices(ficheId) {
       row-key="id"
       flat
       bordered
-      :pagination="{ rowsPerPage: 5 }"
+      :pagination="{ rowsPerPage: 7 }"
     >
       <template v-slot:body-cell-status="props">
         <q-td :props="props" class="text-center">
