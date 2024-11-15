@@ -1,16 +1,19 @@
 <script setup>
 import { ref, onBeforeMount } from "vue";
-import { format, useQuasar } from "quasar";
+import { useQuasar } from "quasar";
 import { getData, putData } from "../services/apiClient";
 import Table from "../components/tables/tablestatus.vue";
-import buttonAdd from "../components/buttons/buttonAdd.vue";
+import ButtonBack from "../components/buttons/buttonBack.vue";
 import Title from "../components/tittle/tittle.vue";
 import Modal from "../components/modal/modal.vue";
-import ButtonBack from "../components/buttons/buttonBack.vue";
 
 const fixed = ref(false);
 const isEditing = ref(false);
 const $q = useQuasar();
+
+// Nuevas variables para los filtros
+const filterType = ref('aprendiz');
+const searchText = ref('');
 
 onBeforeMount(() => {
   getApprentices();
@@ -24,6 +27,7 @@ const columns = ref([
     label: "Tipo de Documento",
     field: "tpdocument",
     sortable: true,
+    style: "width: 5%; text-align: center;",
   },
   {
     name: "numdocument",
@@ -32,6 +36,7 @@ const columns = ref([
     label: "Num. Documento",
     field: "numdocument",
     sortable: true,
+    style: "width: 20%; text-align: center;",
   },
   {
     name: "firstname",
@@ -40,6 +45,7 @@ const columns = ref([
     label: "Nombre",
     field: "firstname",
     sortable: true,
+    style: "width: 20%; text-align: center;",
   },
   {
     name: "lastname",
@@ -48,6 +54,7 @@ const columns = ref([
     label: "Apellido",
     field: "lastname",
     sortable: true,
+    style: "width: 20%; text-align: center;",
   },
   {
     name: "phone",
@@ -55,6 +62,7 @@ const columns = ref([
     label: "Teléfono",
     field: "phone",
     sortable: true,
+    style: "width: 20%; text-align: center;",
   },
   {
     name: "personalEmail",
@@ -63,6 +71,7 @@ const columns = ref([
     label: "Email Personal",
     field: "personalEmail",
     sortable: true,
+    style: "width: 20%; text-align: center;",
   },
   {
     name: "institucionalEmail",
@@ -71,6 +80,7 @@ const columns = ref([
     label: "Email Institucional",
     field: "institucionalEmail",
     sortable: true,
+    style: "width: 20%; text-align: center;",
   },
   {
     name: "ficheName",
@@ -78,6 +88,7 @@ const columns = ref([
     label: "Nombre de Ficha",
     field: (row) => row.fiche?.name || "",
     sortable: true,
+    style: "width: 20%; text-align: center;",
   },
   {
     name: "ficheNumber",
@@ -85,6 +96,7 @@ const columns = ref([
     label: "Num. Ficha",
     field: (row) => row.fiche?.number || "",
     sortable: true,
+    style: "width: 20%; text-align: center;",
   },
   {
     name: "status",
@@ -92,12 +104,14 @@ const columns = ref([
     label: "Estado",
     field: "status",
     sortable: true,
+    style: "width: 20%; text-align: center;",
   },
   {
     name: "opciones",
     required: true,
     align: "center",
     label: "Opciones",
+    style: "width: 20%; text-align: center;",
   },
 ]);
 
@@ -123,15 +137,26 @@ function edit(row) {
 }
 
 async function activate(id) {
-  const res = await putData("apprentice/enableapprentice/${id}");
+  const res = await putData(`apprentice/enableapprentice/${id}`);
   console.log(res);
   await getApprentices();
 }
 
 async function deactivate(id) {
-  const res = await putData("apprentice/disableapprentice/${id}");
+  const res = await putData(`apprentice/disableapprentice/${id}`);
   console.log(res);
   await getApprentices();
+}
+
+// Nuevas funciones para manejar la subida de archivos y la búsqueda
+function handleFileUpload() {
+  // Implementar lógica de subida de archivos
+  console.log('Subida de archivo iniciada');
+}
+
+function handleSearch() {
+  // Implementar lógica de búsqueda basada en filterType y searchText
+  console.log('Buscando:', filterType.value, searchText.value);
 }
 </script>
 
@@ -140,24 +165,75 @@ async function deactivate(id) {
     <div>
       <ButtonBack />
       <Title title="APRENDICES" />
-      <div>
-        <buttonAdd :openAddModal="openAddModal" />
+    </div>
+
+    <!-- Nuevo componente de filtros -->
+    <div class="filter-section q-mb-md">
+      <div class="q-gutter-md">
+        <q-btn 
+          icon="add" 
+          label="Crear" 
+          color="green-9"
+          class="text-white"
+          @click="openAddModal"
+        />
+        <q-btn 
+          icon="upload_file" 
+          label="Subir Archivo" 
+          color="green-9"
+          class="text-white"
+          @click="handleFileUpload"
+        />
+      </div>
+
+      <div class="filter-controls q-mt-md">
+        <div class="text-subtitle2 q-mb-sm">Realizar filtro por</div>
+        <div class="row q-col-gutter-md">
+          <div class="col-12 col-md-8">
+            <q-radio v-model="filterType" val="ficha" label="Ficha" color="green-9" />
+            <q-radio v-model="filterType" val="aprendiz" label="Aprendiz" color="green-9" />
+            <q-radio v-model="filterType" val="estado" label="Estado" color="green-9" />
+          </div>
+          <div class="col-12 col-md-4">
+            <q-input 
+              outlined 
+              v-model="searchText"
+              placeholder="Ingrese el nombre o número de documento"
+              dense
+              @input="handleSearch"
+            >
+              <template v-slot:append>
+                <q-icon name="search" />
+              </template>
+            </q-input>
+          </div>
+        </div>
       </div>
     </div>
 
     <div>
-      <Table :rows="rows" :columns="columns" :openEditModal="edit" :activate="activate" :deactivate="deactivate" />
+      <Table 
+        :rows="rows" 
+        :columns="columns" 
+        :openEditModal="edit" 
+        :activate="activate" 
+        :deactivate="deactivate" 
+      />
     </div>
-
-    <Modal :fixed="fixed" :isEditing="isEditing" entityName="Aprendices" iconName="school"
-      @update:fixed="(val) => (fixed = val)">
+    <Modal 
+      :fixed="fixed" 
+      :isEditing="isEditing" 
+      entityName="Aprendices" 
+      iconName="school"
+      @update:fixed="(val) => (fixed = val)"
+    >
       <template v-slot:modal-content>
         <q-input filled v-model="tpDocument" label="Tipo de Documento" class="input thin-input" label-color="green-9">
           <template v-slot:prepend>
             <q-icon color="green-10" name="assignment" />
           </template>
         </q-input>
-
+        
         <q-input filled v-model="numDocument" label="Num. Documento" class="input thin-input" label-color="green-9">
           <template v-slot:prepend>
             <q-icon color="green-10" name="confirmation_number" />
@@ -211,19 +287,27 @@ async function deactivate(id) {
     </Modal>
   </div>
 </template>
-
 <style scoped>
-/* Inputs */
-
 .input {
   margin: 7px 0;
   color: "green";
   border-color: "green";
 }
 
-/* divs */
 .divMain {
   padding: 0 1.5%;
   margin-top: 20px;
+}
+
+.filter-section {
+  background: white;
+  padding: 1rem;
+  border-radius: 4px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+.filter-controls {
+  border-top: 1px solid #e0e0e0;
+  padding-top: 1rem;
 }
 </style>
