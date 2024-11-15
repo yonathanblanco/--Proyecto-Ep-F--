@@ -11,10 +11,6 @@ const fixed = ref(false);
 const isEditing = ref(false);
 const $q = useQuasar();
 
-// Nuevas variables para los filtros
-const filterType = ref('aprendiz');
-const searchText = ref('');
-
 onBeforeMount(() => {
   getApprentices();
 });
@@ -120,11 +116,21 @@ const rows = ref([]);
 async function getApprentices() {
   const storedAuth = localStorage.getItem("auth");
   const token = storedAuth ? JSON.parse(storedAuth) : null;
-  console.log(token.token);
-  const res = await getData("apprentice/listallapprentice");
-  rows.value = res;
-  console.log(res);
+
+  if (!token || !token.token) {
+    console.error("No token found");
+    return;
+  }
+
+  try {
+    const res = await getData("apprentice/listallapprentice");
+    rows.value = res;
+    console.log(res);
+  } catch (error) {
+    console.error("Error fetching apprentices", error);
+  }
 }
+  
 
 function openAddModal() {
   fixed.value = true;
@@ -134,7 +140,48 @@ function openAddModal() {
 function edit(row) {
   fixed.value = true;
   isEditing.value = true;
+
+  tpDocument.value = row.tpdocument;
+  numDocument.value = row.numdocument;
+  firstName.value = row.firstname;
+  lastName.value = row.lastname;
+  phone.value = row.phone;
+  email.value = row.personalEmail;
+  emailInstitucional.value = row.institucionalEmail;
+  modality.value = row.modality;
+  fiche.value = row.fiche ? row.fiche.name : '';
 }
+
+async function save() {
+  const apprenticeData = {
+    tpdocument: tpDocument.value,
+    numdocument: numDocument.value,
+    firstname: firstName.value,
+    lastname: lastName.value,
+    phone: phone.value,
+    personalEmail: email.value,
+    institucionalEmail: emailInstitucional.value,
+    modality: modality.value,
+    fiche: fiche.value,
+  };
+
+  try {
+    if (isEditing.value) {
+      // Actualización
+      const res = await putData(`apprentice/updateapprenticebyid/:id${row.id}`, apprenticeData);
+      console.log('Apprentice updated', res);
+    } else {
+      // Creación
+      const res = await postData("apprentice/addapprentice", apprenticeData);
+      console.log('Apprentice created', res);
+    }
+    await getApprentices();
+    fixed.value = false;
+  } catch (error) {
+    console.error('Error saving apprentice', error);
+  }
+}
+
 
 async function activate(id) {
   const res = await putData(`apprentice/enableapprentice/${id}`);
@@ -146,17 +193,6 @@ async function deactivate(id) {
   const res = await putData(`apprentice/disableapprentice/${id}`);
   console.log(res);
   await getApprentices();
-}
-
-// Nuevas funciones para manejar la subida de archivos y la búsqueda
-function handleFileUpload() {
-  // Implementar lógica de subida de archivos
-  console.log('Subida de archivo iniciada');
-}
-
-function handleSearch() {
-  // Implementar lógica de búsqueda basada en filterType y searchText
-  console.log('Buscando:', filterType.value, searchText.value);
 }
 </script>
 
@@ -220,13 +256,9 @@ function handleSearch() {
         :deactivate="deactivate" 
       />
     </div>
-    <Modal 
-      :fixed="fixed" 
-      :isEditing="isEditing" 
-      entityName="Aprendices" 
-      iconName="school"
-      @update:fixed="(val) => (fixed = val)"
-    >
+
+    <Modal :fixed="fixed" :isEditing="isEditing" entityName="Aprendices" iconName="school"
+      @update:fixed="(val) => (fixed = val)">
       <template v-slot:modal-content>
         <q-input filled v-model="tpDocument" label="Tipo de Documento" class="input thin-input" label-color="green-9">
           <template v-slot:prepend>

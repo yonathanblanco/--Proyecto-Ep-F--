@@ -1,4 +1,5 @@
 <script setup>
+import { format } from 'date-fns';
 import { ref, onBeforeMount } from "vue";
 import { useQuasar } from "quasar";
 import { getData, putData } from "../services/apiClient";
@@ -46,12 +47,12 @@ const columns = ref([
     field: (row) => row.modality?.name || "MODALIDAD",
   },
   {
-    name: "startDate",
-    align: "center",
-    label: "FECHA INICIO",
-    field: "startDate",
-    format: (val) => val ? new Date(val).toLocaleDateString() : "00/00/00",
-  },
+  name: "startDate",
+  align: "center",
+  label: "FECHA INICIO",
+  field: "formattedStartDate", // Cambia a 'formattedStartDate' en lugar de 'startDate'
+},
+
   {
     name: "endDate",
     align: "center",
@@ -94,21 +95,45 @@ const modalidades = [
 
 async function getApprentices() {
   try {
-    const storedAuth = localStorage.getItem("auth");
-    const token = storedAuth ? JSON.parse(storedAuth) : null;
     const res = await getData("apprentice/listallapprentice");
-    rows.value = res.map((item, index) => ({
-      ...item,
-      index: index + 1
-    }));
+
+    rows.value = res.map((item, index) => {
+      // Verificar startDate antes de formatear
+console.log("Respuesta del backend:", res); // Verificar si `startDate` está presente en cada objeto
+
+
+      // Intentar crear una fecha formateada
+      let formattedStartDate = "Fecha inválida";
+      if (item.startDate) {
+        try {
+          const date = new Date(item.startDate); // Crear fecha a partir de la cadena
+          if (!isNaN(date.getTime())) { // Verificar si es una fecha válida
+            formattedStartDate = format(date, "dd/MM/yyyy");
+          } else {
+            console.error("Fecha inválida en startDate:", item.startDate);
+          }
+        } catch (e) {
+          console.error("Error formateando la fecha:", e);
+        }
+      }
+
+      return {
+        ...item,
+        index: index + 1,
+        modalityName: item.modality?.name || "N/A",
+        formattedStartDate,
+      };
+    });
+
   } catch (error) {
-    console.error('Error fetching apprentices:', error);
+    console.error("Error fetching apprentices:", error); 
     $q.notify({
-      type: 'negative',
-      message: 'Error al cargar los aprendices'
+      type: "negative",
+      message: `Error al cargar los aprendices: ${error.message}`,
     });
   }
 }
+
 
 function openAddModal() {
   selectedModality.value = null;
@@ -194,11 +219,8 @@ function edit(row) {
 
 <template>
   <div class="q-gutter-md divMain">
-    
-    <div>
-    <ButtonBack />
-    <Title title="REGISTROS EP" />
-    </div>
+      <ButtonBack />
+      <Title title="REGISTROS EP" />
     <!-- Filtros y búsqueda -->
     <div class="row items-center justify-between q-mb-md">
       <div class="divAgregar">
@@ -226,7 +248,7 @@ function edit(row) {
     </div>
 
     <!-- Modal -->
-    <q-dialog v-model="showModal" persistent>
+    <q-dialog v-model="showModal" persistent> 
       <q-card style="min-width: 350px">
         <q-card-section class="text-h6 text-center" style="background-color: #2E7D32; color: white;">
           SELECCIONE MODALIDAD
@@ -247,6 +269,12 @@ function edit(row) {
 </template>
 
 <style scoped>
+
+.divMain {
+  padding: 0 1.5%;
+  margin-top: 20px;
+}
+
 .add-aprendiz-btn {
   background-color: #2E7D32;
   color: #ffffff;
@@ -280,7 +308,7 @@ function edit(row) {
 }
 
 .filter-container{
-  margin-right: 200px
+  margin-right: 190px
 }
 
 .search-container {

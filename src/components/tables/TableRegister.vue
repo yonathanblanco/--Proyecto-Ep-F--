@@ -4,7 +4,7 @@
       <!-- Slot para la columna 'opciones' con botón de acciones tipo FAB -->
       <template v-slot:body-cell-opciones="props">
         <q-td :props="props">
-          <q-fab v-model="fab" color="#2E7D32" icon="keyboard_arrow_down" direction="down" class="fab-button">
+          <q-fab v-model="fab" color="#2E7D32" icon="keyboard_arrow_left" direction="left" class="fab-button">
 
             <!-- Acción de editar -->
             <q-fab-action class="fab-action-green" @click="onClickEdit(props.row)" icon="edit" label="Editar" />

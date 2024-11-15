@@ -21,6 +21,7 @@ const props = defineProps({
   display: flex;
   flex-direction: column;
   align-items: center;
+  margin-top: -20px;
 }
 
 .title {
@@ -39,6 +40,6 @@ const props = defineProps({
   height: 4px;
   /* Altura de la línea */
   background-color: #2e7d32;
-  margin-top: 20px;
+ 
 }
 </style>

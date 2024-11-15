@@ -44,7 +44,6 @@ const columns = ref([
     label: "ESTADO",
     field: "status",
     sortable: true,
-    style: "width: 20%; text-align: center;",
   },
   {
     name: "verAprendices",
