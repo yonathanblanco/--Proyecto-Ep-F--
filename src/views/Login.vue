@@ -80,7 +80,7 @@
           <q-footer class="footer-custom">
             <q-toolbar class="justify-center">
               <q-toolbar-titles class="text-center">
-                <div class="text-bold tittleFooter">REPFORA - Sena 2024 Todos los derechos reservados </div>
+                <div class="text-bold tittleFooter">REPFORA Sena 2024 Todos los derechos reservados </div>
               </q-toolbar-titles>
             </q-toolbar>
           </q-footer>
