@@ -1,9 +1,9 @@
 <script setup>
-import Tableclean from "../components/tables/Tableclean.vue";
-import ButtonOpenModal from "../components/buttons/buttonAdd.vue";
-import Title from "../components/tittle/tittle.vue";
+import Tableclean from "@/components/tables/Tableclean.vue";
+import ButtonOpenModal from "@/components/buttons/buttonAdd.vue";
+import Title from "@/components/tittle/tittle.vue";
 import { ref, onMounted } from "vue";
-import { getData } from "../services/apiClient.js";
+import { getData } from "@/services/apiClient.js";
 
 
 

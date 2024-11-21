@@ -6,6 +6,6 @@
     </template>
     
     <script setup>
-    import Title from '../components/tittle/tittle.vue';
+    import Title from '@/components/tittle/tittle.vue';
     </script>
     

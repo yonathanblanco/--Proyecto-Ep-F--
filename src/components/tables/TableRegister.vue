@@ -4,18 +4,33 @@
       <!-- Slot para la columna 'opciones' con botón de acciones tipo FAB -->
       <template v-slot:body-cell-opciones="props">
         <q-td :props="props">
-          <q-fab v-model="fab" color="#2E7D32" icon="keyboard_arrow_left" direction="left" class="fab-button">
-
+          <q-fab
+            v-model="fabStates[props.row._id]"
+            color="#2E7D32"
+            icon="keyboard_arrow_left"
+            direction="left"
+            class="fab-button"
+          >
             <!-- Acción de editar -->
             <q-fab-action class="fab-action-green" @click="onClickEdit(props.row)" icon="edit" label="Editar" />
 
             <!-- Acción de activar -->
-            <q-fab-action class="fab-action-green" @click="activate(props.row._id)" v-if="props.row.status === 0"
-              icon="check" label="Activar" />
+            <q-fab-action
+              class="fab-action-green"
+              @click="activate(props.row._id)"
+              v-if="props.row.status === 0"
+              icon="check"
+              label="Activar"
+            />
 
             <!-- Acción de desactivar -->
-            <q-fab-action class="fab-action-green" @click="deactivate(props.row._id)" v-else icon="close"
-              label="Desactivar" />
+            <q-fab-action
+              class="fab-action-green"
+              @click="deactivate(props.row._id)"
+              v-else
+              icon="close"
+              label="Desactivar"
+            />
 
             <!-- Acción de detalles -->
             <q-fab-action class="fab-action-green" @click="showDetails(props.row)" icon="visibility" label="Detalles" />
@@ -24,8 +39,12 @@
             <q-fab-action class="fab-action-green" @click="assign(props.row)" icon="assignment" label="Asignación" />
 
             <!-- Acción de registro de horas -->
-            <q-fab-action class="fab-action-green" @click="logHours(props.row)" icon="access_time"
-              label="Registro de Horas" />
+            <q-fab-action
+              class="fab-action-green"
+              @click="logHours(props.row)"
+              icon="access_time"
+              label="Registro de Horas"
+            />
           </q-fab>
         </q-td>
       </template>
@@ -43,9 +62,10 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { reactive } from 'vue';
 
-const fab = ref(false); // Controla el estado de la FAB
+// Estados individuales para cada FAB basado en su ID
+const fabStates = reactive({});
 
 const props = defineProps({
   rows: {
@@ -81,6 +101,8 @@ const props = defineProps({
     required: true
   }
 });
+
+
 </script>
 
 <style scoped>
