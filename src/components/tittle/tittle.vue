@@ -26,7 +26,7 @@ const props = defineProps({
 
 .title {
   font-family: Arial, Helvetica, sans-serif;
-  font-size: 58px;
+  font-size: 57px;
   font-weight: 600;
   text-align: center;
   color: #333;
