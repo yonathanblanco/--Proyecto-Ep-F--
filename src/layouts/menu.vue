@@ -97,9 +97,9 @@
 <script setup>
 import { ref, computed } from "vue";
 import { useRouter } from "vue-router";
-import iconSena from '../assets/icon.png';
-import buttonsMenu from '../components/buttons/buttonsMenu.vue';
-import { useAuthStore } from '../stores/authStore';
+import iconSena from '@/assets/icon.png';
+import buttonsMenu from '@/components/buttons/buttonsMenu.vue';
+import { useAuthStore } from '@/stores/authStore';
 
 const leftDrawerOpen = ref(false);
 const router = useRouter();

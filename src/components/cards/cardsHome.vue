@@ -60,12 +60,17 @@ const props = defineProps({
 }
 
 .titles {
-    font-size: 1.2rem;
+    font-size: 1.4rem;
     font-weight: bold;
+    display: flex; /* Asegura el uso de Flexbox */
+    justify-content: center; /* Centrar horizontalmente */
+    align-items: center; /* Centrar verticalmente */
     text-align: center;
-    margin: 5px 0;
+    margin: 10px 0; /* Ajusta el margen para dar espacio */
     background-color: transparent;
+    padding-left: 80px
 }
+
 
 .section {
     background-color: #ffffffd0;
