@@ -4,7 +4,7 @@
       <!-- Celda de edición -->
       <template v-slot:body-cell-editar="props">
         <q-td :props="props" class="q-pa-sm">
-          <q-btn class="edit-btn q-pa-sm" @click="onClickEdit(props.row)">
+          <q-btn class="edit-btn q-pa-sm" @click="openEditModal(props.row)">
             <q-icon name="edit" />
           </q-btn>
         </q-td>
@@ -65,7 +65,7 @@ const props = defineProps({
     type: Array,
     required: true
   },
-  onClickEdit: {
+  openEditModal: {
     type: Function,
     required: true
   },
