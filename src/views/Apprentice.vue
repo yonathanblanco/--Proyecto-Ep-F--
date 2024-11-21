@@ -1,7 +1,7 @@
 <script setup>
 import { ref, onBeforeMount } from "vue";
 import { useQuasar } from "quasar";
-import { getData, putData } from "../services/apiClient";
+import { getData, putData, postData } from "../services/apiClient";
 import Table from "../components/tables/tablestatus.vue";
 import ButtonBack from "../components/buttons/buttonBack.vue";
 import Title from "../components/tittle/tittle.vue";
@@ -11,44 +11,54 @@ const fixed = ref(false);
 const isEditing = ref(false);
 const $q = useQuasar();
 
+let tpDocument = ref("");
+let numDocument = ref("");
+let firstName = ref("");
+let lastName = ref("");
+let personalEmail = ref("");
+let phone = ref("");
+let ficheName = ref("");
+let ficheNumber = ref("");
+let name = ref("");
+
 onBeforeMount(() => {
   getApprentices();
 });
 
 const columns = ref([
   {
-    name: "tpdocument",
+    name: "tpDocument",
     required: true,
     align: "center",
     label: "Tipo de Documento",
-    field: "tpdocument",
+    field: "tpDocument",
     sortable: true,
     style: "width: 5%; text-align: center;",
   },
   {
-    name: "numdocument",
+    name: "numDocument",
     required: true,
     align: "center",
     label: "Num. Documento",
-    field: "numdocument",
+    field: "numDocument",
     sortable: true,
     style: "width: 20%; text-align: center;",
   },
   {
-    name: "firstname",
+    name: "firstName",
     required: true,
     align: "center",
     label: "Nombre",
-    field: "firstname",
+    field: "firstName",
     sortable: true,
     style: "width: 20%; text-align: center;",
   },
   {
-    name: "lastname",
+    name: "lastName",
     required: true,
     align: "center",
     label: "Apellido",
-    field: "lastname",
+    field: "lastName",
     sortable: true,
     style: "width: 20%; text-align: center;",
   },
@@ -66,15 +76,6 @@ const columns = ref([
     align: "center",
     label: "Email Personal",
     field: "personalEmail",
-    sortable: true,
-    style: "width: 20%; text-align: center;",
-  },
-  {
-    name: "institucionalEmail",
-    required: true,
-    align: "center",
-    label: "Email Institucional",
-    field: "institucionalEmail",
     sortable: true,
     style: "width: 20%; text-align: center;",
   },
@@ -103,11 +104,19 @@ const columns = ref([
     style: "width: 20%; text-align: center;",
   },
   {
+    name: "name",
+    align: "center",
+    label: "Modalidad",
+    field: (row) => row.modality?.name || "",
+    sortable: true,
+    style: "width: 20%; text-align: center;",
+  },
+  {
     name: "opciones",
-    required: true,
     align: "center",
     label: "Opciones",
-    style: "width: 20%; text-align: center;",
+    field: "opciones",
+    style: "width: 15%; text-align: center;",
   },
 ]);
 
@@ -130,58 +139,64 @@ async function getApprentices() {
     console.error("Error fetching apprentices", error);
   }
 }
-  
 
 function openAddModal() {
   fixed.value = true;
   isEditing.value = false;
+  tpDocument.value = "";
+  numDocument.value = "";
+  firstName.value = "";
+  lastName.value = "";
+  phone.value = "";
+  personalEmail.value = "";
+  ficheName.value = "";
+  ficheNumber.value = "";
+  name.value = "";
 }
 
 function edit(row) {
   fixed.value = true;
   isEditing.value = true;
-
-  tpDocument.value = row.tpdocument;
-  numDocument.value = row.numdocument;
-  firstName.value = row.firstname;
-  lastName.value = row.lastname;
+  tpDocument.value = row.tpDocument;
+  numDocument.value = row.numDocument;
+  firstName.value = row.firstName;
+  lastName.value = row.lastName;
   phone.value = row.phone;
-  email.value = row.personalEmail;
-  emailInstitucional.value = row.institucionalEmail;
-  modality.value = row.modality;
-  fiche.value = row.fiche ? row.fiche.name : '';
+  personalEmail.value = row.personalEmail;
+  name.value = row.modality?.name;
+  ficheName.value = row.fiche?.name;
+  ficheNumber.value = row.fiche?.number;
 }
 
 async function save() {
   const apprenticeData = {
-    tpdocument: tpDocument.value,
-    numdocument: numDocument.value,
-    firstname: firstName.value,
-    lastname: lastName.value,
+    tpDocument: tpDocument.value,
+    numDocument: numDocument.value,
+    firstName: firstName.value,
+    lastName: lastName.value,
     phone: phone.value,
-    personalEmail: email.value,
-    institucionalEmail: emailInstitucional.value,
-    modality: modality.value,
-    fiche: fiche.value,
+    personalEmail: personalEmail.value,
+    modality: name.value,
+    fiche: {
+      name: ficheName.value,
+      number: ficheNumber.value,
+    },
   };
 
   try {
     if (isEditing.value) {
-      // Actualización
-      const res = await putData(`apprentice/updateapprenticebyid/:id${row.id}`, apprenticeData);
-      console.log('Apprentice updated', res);
+      const res = await putData(`apprentice/updateapprenticebyid/${numDocument.value}`, apprenticeData);
+      console.log("Apprentice updated", res);
     } else {
-      // Creación
       const res = await postData("apprentice/addapprentice", apprenticeData);
-      console.log('Apprentice created', res);
+      console.log("Apprentice created", res);
     }
     await getApprentices();
     fixed.value = false;
   } catch (error) {
-    console.error('Error saving apprentice', error);
+    console.error("Error saving apprentice", error);
   }
 }
-
 
 async function activate(id) {
   const res = await putData(`apprentice/enableapprentice/${id}`);
@@ -258,7 +273,7 @@ async function deactivate(id) {
     </div>
 
     <Modal :fixed="fixed" :isEditing="isEditing" entityName="Aprendices" iconName="school"
-      @update:fixed="(val) => (fixed = val)">
+      @update:fixed="(val) => (fixed = val)" @save="save">
       <template v-slot:modal-content>
         <q-input filled v-model="tpDocument" label="Tipo de Documento" class="input thin-input" label-color="green-9">
           <template v-slot:prepend>
@@ -290,27 +305,26 @@ async function deactivate(id) {
           </template>
         </q-input>
 
-        <q-input filled v-model="email" label="Email Personal" class="input thin-input" label-color="green-9">
+        <q-input filled v-model="personalEmail" label="Email Personal" class="input thin-input" label-color="green-9">
           <template v-slot:prepend>
             <q-icon color="green-10" name="email" />
           </template>
         </q-input>
 
-        <q-input filled v-model="emailInstitucional" label="Email Institucional" class="input thin-input"
-          label-color="green-9">
-          <template v-slot:prepend>
-            <q-icon color="green-10" name="email" />
-          </template>
-        </q-input>
-
-        <q-input filled v-model="modality" label="Modalidad Epata Productiva" class="input thin-input"
+        <q-input filled v-model="name" label="Modalidad Epata Productiva" class="input thin-input"
           label-color="green-9">
           <template v-slot:prepend>
             <q-icon color="green-10" name="book" />
           </template>
         </q-input>
 
-        <q-input filled v-model="fiche" label="Ficha" class="input thin-input" label-color="green-9">
+        <q-input filled v-model="ficheName" label="Nombre de Ficha" class="input thin-input" label-color="green-9">
+          <template v-slot:prepend>
+            <q-icon color="green-10" name="note" />
+          </template>
+        </q-input>
+
+        <q-input filled v-model="ficheNumber" label="Num. Ficha" class="input thin-input" label-color="green-9">
           <template v-slot:prepend>
             <q-icon color="green-10" name="note" />
           </template>
@@ -319,6 +333,7 @@ async function deactivate(id) {
     </Modal>
   </div>
 </template>
+
 <style scoped>
 .input {
   margin: 7px 0;
