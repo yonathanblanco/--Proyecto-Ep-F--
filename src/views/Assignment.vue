@@ -1,9 +1,9 @@
 <script setup>
-import Table from "../components/tables/tablestatus.vue";
-import ButtonOpenModal from "../components/buttons/buttonAdd.vue";
-import Title from "../components/tittle/tittle.vue";
+import Table from "@/components/tables/tablestatus.vue";
+import ButtonOpenModal from "@/components/buttons/buttonAdd.vue";
+import Title from "@/components/tittle/tittle.vue";
 import { ref, onMounted } from "vue";
-import { getData } from "../services/apiClient.js";
+import { getData } from "@/services/apiClient.js";
 
 const rows = ref([]);
 let alert = ref(false);

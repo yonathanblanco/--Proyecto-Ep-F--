@@ -2,22 +2,22 @@
 import { onBeforeMount, ref } from 'vue'
 import axios from 'axios'
 import { useQuasar } from 'quasar';
-import CardComponent from '../components/cards/cardsHome.vue';
-import { useAuthStore } from '../stores/authStore';
+import CardComponent from '@/components/cards/cardsHome.vue';
+import { useAuthStore } from '@/stores/authStore';
 import { computed } from "vue";
 
 const authStore = useAuthStore();
 const user = computed(() => authStore.getUserDetails());
 
-import logImage from '../assets/img/usuarios.png';
-import apprenticeImage from '../assets/img/aprendices.png';
-import binnacleImage from '../assets/img/bitacoras.png';
-import modalityImage from '../assets/img/fichasImage.png';
-import followupImage from '../assets/img/seguimientosImage.png';
-import assignmentImage from '../assets/img/modalidadImage.png';
-import hoursImage from '../assets/img/Horas.png';
-import registerImage from '../assets/img/Registros.png';
-import fichesImage from '../assets/img/logImage.png';
+import logImage from '@/assets/img/usuarios.png';
+import apprenticeImage from '@/assets/img/aprendices.png';
+import binnacleImage from '@/assets/img/bitacoras.png';
+import modalityImage from '@/assets/img/fichasImage.png';
+import followupImage from '@/assets/img/seguimientosImage.png';
+import assignmentImage from '@/assets/img/modalidadImage.png';
+import hoursImage from '@/assets/img/Horas.png';
+import registerImage from '@/assets/img/Registros.png';
+import fichesImage from '@/assets/img/logImage.png';
 
 
 

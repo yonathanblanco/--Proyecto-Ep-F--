@@ -1,4 +1,4 @@
-import  apiRepfora  from '../plugins/axiosRephora.js'; // Importa tu instancia de Axios si está configurada en /plugins
+import  apiRepfora  from '@/plugins/axiosRephora.js'; // Importa tu instancia de Axios si está configurada en /plugins
 
 // Función POST repfora
 

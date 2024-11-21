@@ -1,11 +1,13 @@
 <script setup>
 import { ref, onBeforeMount } from "vue";
 import { useQuasar } from "quasar";
+
 import { getData, putData, postData } from "../services/apiClient";
 import Table from "../components/tables/tablestatus.vue";
 import ButtonBack from "../components/buttons/buttonBack.vue";
 import Title from "../components/tittle/tittle.vue";
 import Modal from "../components/modal/modal.vue";
+
 
 const fixed = ref(false);
 const isEditing = ref(false);

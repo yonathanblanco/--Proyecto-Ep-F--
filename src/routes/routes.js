@@ -1,24 +1,24 @@
-import { useAuthStore } from '../stores/authStore.js';
+import { useAuthStore } from '@/stores/authStore.js';
 import { createRouter, createWebHashHistory } from 'vue-router';
-import Apprentice from '../views/Apprentice.vue';
-import Assignment from '../views/Assignment.vue';
-import Binnacle from '../views/Binnacle.vue';
-import Home from '../views/Home.vue';
-import Log from '../views/Log.vue';
-import Login from '../views/Login.vue';
-import Modality from '../views/Modality.vue';
-import Register from '../views/Register.vue';
-import Menu from '../layouts/menu.vue'
-import Fiches from '../views/Fiches.vue'
-import Report from '../views/Report.vue'
-import Followup from '../views/Followup.vue';
-import Consultant from '../views/Consultant.vue'
-import RecordHours from '../views/RecordHours.vue';
-import AssignmentInstructor from '../views/AssignmentInstructor.vue';
-import BinnacleInstructor from '../views/BinnacleInstructor.vue';
-import FollowupInstructor from '../views/FollowupInstructor.vue';
-import Certification from '../views/Certification.vue';
-import CertificationInstructor from '../views/CertificationInstructor.vue';
+import Apprentice from '@/views/Apprentice.vue';
+import Assignment from '@/views/Assignment.vue';
+import Binnacle from '@/views/Binnacle.vue';
+import Home from '@/views/Home.vue';
+import Log from '@/views/Log.vue';
+import Login from '@/views/Login.vue';
+import Modality from '@/views/Modality.vue';
+import Register from '@/views/Register.vue';
+import Menu from '@/layouts/menu.vue'
+import Fiches from '@/views/Fiches.vue'
+import Report from '@/views/Report.vue'
+import Followup from '@/views/Followup.vue';
+import Consultant from '@/views/Consultant.vue'
+import RecordHours from '@/views/RecordHours.vue';
+import AssignmentInstructor from '@/views/AssignmentInstructor.vue';
+import BinnacleInstructor from '@/views/BinnacleInstructor.vue';
+import FollowupInstructor from '@/views/FollowupInstructor.vue';
+import Certification from '@/views/Certification.vue';
+import CertificationInstructor from '@/views/CertificationInstructor.vue';
 
 //report y followup corregir 
 
