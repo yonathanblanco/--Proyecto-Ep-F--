@@ -1,9 +1,12 @@
 <script setup>
+//import { ref, onBeforeMount, computed, watch } from "vue";
 import { format } from 'date-fns';
 import { ref, onBeforeMount } from "vue";
 import { useQuasar } from "quasar";
 import { getData, putData } from "../services/apiClient";
 import Table from "../components/tables/TableRegister.vue";
+//import TableModal from "../components/modal/TableModal.vue";
+//import FormModal from "../components/modal/FormModal.vue";
 import Title from "../components/tittle/tittle.vue";
 import ButtonBack from "../components/buttons/buttonBack.vue";
 import { QDialog, QCard, QCardSection, QBtn, QInput, QSelect, QRadio } from 'quasar';
@@ -69,12 +72,12 @@ const columns = ref([
       ? '<q-badge color="green" label="Activo" />'
       : '<q-badge color="red" label="Inactivo" />',
   },
-  {
-    name: "opciones",
-    align: "center",
-    label: "OPCIONES",
-    field: "opciones"
-  }
+    {
+      name: "opciones",
+      align: "center",
+      label: "OPCIONES",
+      field: "opciones"
+    }
 
 ]);
 
