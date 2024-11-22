@@ -1,11 +1,13 @@
 <script setup>
-import { ref, onBeforeMount } from "vue";
+import { ref, onBeforeMount, computed } from "vue";
 import { useQuasar } from "quasar";
 import { getData, putData, postData } from "../services/apiClient";
+import { getRepforaData } from "../services/apiRepfora";
 import Table from "../components/tables/tablestatus.vue";
 import ButtonBack from "../components/buttons/buttonBack.vue";
 import Title from "../components/tittle/tittle.vue";
 import Modal from "../components/modal/modal.vue";
+import filterSelect from "../components/selectfilter/filterSelect.vue";
 
 const fixed = ref(false);
 const isEditing = ref(false);
@@ -20,6 +22,15 @@ let phone = ref("");
 let ficheName = ref("");
 let ficheNumber = ref("");
 let name = ref("");
+
+const group = ref("aprendiz");
+const selectedFilter = ref("");
+const rows = ref([]);
+const radioButtons = ref([
+  { label: "Aprendiz", value: "aprendiz" },
+  { label: "Ficha", value: "ficha" },
+  { label: "Estado", value: "estado" },
+]);
 
 onBeforeMount(() => {
   getApprentices();
@@ -120,8 +131,6 @@ const columns = ref([
   },
 ]);
 
-const rows = ref([]);
-
 async function getApprentices() {
   const storedAuth = localStorage.getItem("auth");
   const token = storedAuth ? JSON.parse(storedAuth) : null;
@@ -139,6 +148,60 @@ async function getApprentices() {
     console.error("Error fetching apprentices", error);
   }
 }
+
+const fetchFicheOptions = async () => {
+  const res = await getRepforaData("/fiches");
+  return res.map(fiche => ({
+    label: `${fiche.program?.name} - ${fiche.number}`,
+    value: fiche.id
+  }));
+};
+
+const fetchApprenticeOptions = () => {
+  return rows.value.map(apprentice => ({
+    label: `${apprentice.firstName} ${apprentice.lastName} - ${apprentice.numDocument}`,
+    value: apprentice.id
+  }));
+};
+
+const fetchStatusOptions = () => {
+  return [
+    { label: "Activa", value: "Activa" },
+    { label: "Inactiva", value: "Inactiva" },
+  ];
+};
+
+const getOptionsForSelectedRadio = computed(() => {
+  switch (group.value) {
+    case "ficha":
+      return fetchFicheOptions;
+    case "estado":
+      return fetchStatusOptions;
+    case "aprendiz":
+      return fetchApprenticeOptions;
+    default:
+      return [];
+  }
+});
+
+const filter = () => {
+  const filteredRows = rows.value.filter(row => {
+    const matchesFiche = group.value === "ficha" ? row.fiche?.id === selectedFilter.value : true;
+    const matchesSearchTerm = group.value === "aprendiz" && selectedFilter.value
+      ? row.firstName.toLowerCase().includes(selectedFilter.value.toLowerCase()) ||
+        row.lastName.toLowerCase().includes(selectedFilter.value.toLowerCase()) ||
+        row.numDocument.toLowerCase().includes(selectedFilter.value.toLowerCase())
+      : true;
+    const matchesStatus = group.value === "estado" && selectedFilter.value
+      ? (selectedFilter.value === "Activa" && row.status === 1) ||
+        (selectedFilter.value === "Inactiva" && row.status === 0)
+      : true;
+
+    return matchesFiche && matchesSearchTerm && matchesStatus;
+  });
+
+  rows.value = filteredRows;
+};
 
 function openAddModal() {
   fixed.value = true;
@@ -239,25 +302,17 @@ async function deactivate(id) {
 
       <div class="filter-controls q-mt-md">
         <div class="text-subtitle2 q-mb-sm">Realizar filtro por</div>
-        <div class="row q-col-gutter-md">
-          <div class="col-12 col-md-8">
-            <q-radio v-model="filterType" val="ficha" label="Ficha" color="green-9" />
-            <q-radio v-model="filterType" val="aprendiz" label="Aprendiz" color="green-9" />
-            <q-radio v-model="filterType" val="estado" label="Estado" color="green-9" />
-          </div>
-          <div class="col-12 col-md-4">
-            <q-input 
-              outlined 
-              v-model="searchText"
-              placeholder="Ingrese el nombre o número de documento"
-              dense
-              @input="handleSearch"
-            >
-              <template v-slot:append>
-                <q-icon name="search" />
-              </template>
-            </q-input>
-          </div>
+        <div class="q-pa-sm rounded-borders divRadioButtons">
+          Filtrar por:
+          <q-option-group inline :options="radioButtons" type="radio" v-model="group" />
+        </div>
+        <div class="divFilter">
+          <filterSelect 
+            :label="group === 'aprendiz' ? 'Buscar aprendiz' : group === 'ficha' ? 'Buscar ficha' : 'Buscar estado'"
+            :fetchOptions="getOptionsForSelectedRadio"
+            v-model="selectedFilter"
+            @filter="filter"
+          />
         </div>
       </div>
     </div>
@@ -356,5 +411,9 @@ async function deactivate(id) {
 .filter-controls {
   border-top: 1px solid #e0e0e0;
   padding-top: 1rem;
+}
+
+.divRadioButtons {
+  margin-bottom: 1rem;
 }
 </style>
