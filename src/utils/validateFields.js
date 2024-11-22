@@ -1,4 +1,4 @@
-import { notifyErrorRequest } from "../utils/notify.js";
+import { notifyErrorRequest } from "@/utils/notify.js";
 
 export function validarCampos(email, password, document = null) {
     if (email === '' || password === '') {

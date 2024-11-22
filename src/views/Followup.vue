@@ -1,11 +1,11 @@
 <script setup>
 import { ref, onBeforeMount,computed } from "vue";
 import { useQuasar } from "quasar";
-import { getRepforaData } from "../services/apiRepfora";
-import { getData } from "../services/apiClient";
-import Title from "../components/tittle/tittle.vue";
-import ButtonBack from '../components/buttons/buttonBack.vue';
-import filterSelect from "../components/selectfilter/filterSelect.vue";
+import { getRepforaData } from "@/services/apiRepfora";
+import { getData } from "@/services/apiClient";
+import Title from "@/components/tittle/tittle.vue";
+import ButtonBack from '@/components/buttons/buttonBack.vue';
+import filterSelect from "@/components/selectfilter/filterSelect.vue";
 
 const fixed = ref(false);
 const $q = useQuasar();

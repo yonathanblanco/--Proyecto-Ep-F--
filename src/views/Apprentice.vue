@@ -1,6 +1,7 @@
 <script setup>
 import { ref, onBeforeMount, computed } from "vue";
 import { useQuasar } from "quasar";
+
 import { getData, putData, postData } from "../services/apiClient";
 import { getRepforaData } from "../services/apiRepfora";
 import Table from "../components/tables/tablestatus.vue";
@@ -8,6 +9,7 @@ import ButtonBack from "../components/buttons/buttonBack.vue";
 import Title from "../components/tittle/tittle.vue";
 import Modal from "../components/modal/modal.vue";
 import filterSelect from "../components/selectfilter/filterSelect.vue";
+
 
 const fixed = ref(false);
 const isEditing = ref(false);
