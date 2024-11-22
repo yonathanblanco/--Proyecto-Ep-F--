@@ -92,13 +92,13 @@
 
 <script setup>
 import { ref } from "vue";
-import { postData } from "@/services/apiClient.js";
-import { postRepforaData } from "@/services/apiRepfora.js";
-import { notifySuccessRequest, notifyErrorRequest } from "@/utils/notify.js";
-import { validarCampos } from "@/utils/validateFields.js";
+import { postData } from "../services/apiClient.js";
+import { postRepforaData } from "../services/apiRepfora.js";
+import { notifySuccessRequest, notifyErrorRequest } from "../utils/notify.js";
+import { validarCampos } from "../utils/validateFields.js";
 import { useRouter } from 'vue-router';
-import { useAuthStore } from '@/stores/authStore.js';
-import logosena from "@/assets/img/logosena.png"
+import { useAuthStore } from '../stores/authStore.js';
+import logosena from "../assets/img/logosena.png"
 
 const useAuth = useAuthStore();
 const $router = useRouter();
