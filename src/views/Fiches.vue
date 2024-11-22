@@ -1,12 +1,16 @@
 <script setup>
 import { ref, onBeforeMount } from "vue";
 import { useQuasar } from "quasar";
-import { getRepforaData } from "@/services/apiRepfora";
-import Title from "@/components/tittle/tittle.vue";
-import ButtonBack from '@/components/buttons/buttonBack.vue';
+import { getRepforaData } from "../services/apiRepfora";
+import Title from "../components/tittle/tittle.vue";
+import ButtonBack from '../components/buttons/buttonBack.vue';
 
 const fixed = ref(false);
 const $q = useQuasar();
+
+const group = ref("");
+const selectedFilter = ref("");
+const rows = ref([]);
 
 onBeforeMount(() => {
   getFiches();
@@ -53,17 +57,40 @@ const columns = ref([
   },
 ]);
 
-const rows = ref([]);
-const searchTerm = ref('');
-
 async function getFiches() {
-  const storedAuth = localStorage.getItem('auth');
+  const storedAuth = localStorage.getItem("auth");
   const token = storedAuth ? JSON.parse(storedAuth) : null;
   const res = await getRepforaData("/fiches");
   rows.value = res.map((item, index) => ({
     ...item,
-    index: index + 1
+    index: index + 1,
+    concatenated: `${item.program?.name || "Sin Nombre"} - ${item.number || "Sin Código"}`
   }));
+}
+
+const fetchFicheOptions = async () => {
+  const res = await getRepforaData("/fiches");
+  return res.map(fiche => ({
+    label: `${fiche.program?.name} - ${fiche.number}`,
+    value: fiche.id
+  }));
+};
+
+const filter = () => {
+  const selectedFiche = rows.value.find(row => row.id === group.value);
+
+  if (selectedFiche) {
+    rows.value = [selectedFiche]; // Mostrar solo la ficha seleccionada
+    $q.notify({
+      type: "positive",
+      message: "Filtro aplicado correctamente."
+    });
+  } else {
+    $q.notify({
+      type: "warning",
+      message: "No se encontraron resultados para el filtro seleccionado."
+    });
+  }
 };
 
 function viewApprentices(ficheId) {
@@ -78,23 +105,22 @@ function viewApprentices(ficheId) {
       <Title title="FICHAS" />
     </div>
 
-    <q-input
-      v-model="searchTerm"
-      outlined
-      dense
-      placeholder="Ingrese el nombre o número de documento"
-      class="q-mb-md"
-      style="max-width: 500px;"
-    >
-      <template v-slot:prepend>
-        <q-icon name="search" />
-      </template>
-    </q-input>
+    <div class="divFiltersAndButtons">
+      <div class="filters">
+        <div class="divFilter">
+          <filterSelect
+            label="Buscar ficha"
+            :fetchOptions="fetchFicheOptions"
+            v-model="group"
+            @filter="filter"
+          />
+        </div>
+      </div>
+    </div>
 
     <q-table
       :rows="rows"
       :columns="columns"
-      :filter="searchTerm"
       row-key="id"
       flat
       bordered
