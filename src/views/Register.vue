@@ -1,22 +1,19 @@
 <template>
   <q-layout view="lHh Lpr lff" class="layout">
+    
     <q-page-container>
+      
       <Header :drawerOpen="drawerOpen" @toggleDrawer="toggleDrawer"></Header>
       <Sidebar :drawerOpen="drawerOpen" @update:drawerOpen="toggleDrawer" />
 
       <br />
-
-      <div class="table-container">
-        <div>
+      <div>
           <ButtonBack />
           <Title title="REGISTRO" />
         </div>
-
-        <div style="display: flex; align-items: center !important">
-          <q-btn to="/home" dense unelevated round color="primary" icon="arrow_back" text-color="white" />
-          <hr id="hr" color="primary" />
-        </div>
-
+      <div class="table-container">
+        
+      
         <CustomButton label="CREAR REGISTRO" :onClickFunction="openDialog" :icon="['fa', 'circle-plus']">
         </CustomButton>
 
@@ -275,6 +272,7 @@ import FormModal from "@/components/modal/FormModal.vue";
 import Input from "@/components/inputs/CustomInput.vue";
 import { notifyErrorRequest, notifySuccessRequest,} from "@/utils/notify";
 import { getData, postData } from "@/services/apiClient.js";
+import ButtonBack from "@/components/buttons/buttonBack.vue";
 
 let tituloRegistro = ref("Agregar registro");
 const dialog = ref(false);
@@ -327,8 +325,8 @@ const registerData = {
   startDate: startDate.value,
   endDate: endDate.value,
   company: company.value,
-  phoneCompany: phoneCompany.value,
-  addressCompany: addressCompany.value,
+  phonecompany: phoneCompany.value,
+  addresscompany: addressCompany.value,
   owner: owner.value,
   docAlternative: docAlternative.value,
   hour: hour.value,
@@ -559,7 +557,7 @@ onBeforeMount(() => {
 });
 
 async function getInstructores() {
-  const response = await getData(`Repfora/instructors`);
+  const response = await getData(`repfora/listInstructors`);
   console.log(response);
   instructores.value = response;
 }
@@ -671,9 +669,9 @@ const borrarFilaAprendiz = (row) => {
 };
 
 async function getDataForTable() {
-  const getRegisters = await getData("Register/listallregister");
-  const getApprentices = await getData("Apprentice/listallapprentice");
-  const getModalities = await getData("Modality/listallmodality");
+  const getRegisters = await getData("register/listallregister");
+  const getApprentices = await getData("apprentice/listallapprentice");
+  const getModalities = await getData("modality/listallmodality");
 
   // Para usar en el modal e imprimir los aprendices en el filtro
   aprendices.value = getApprentices.apprentices;
