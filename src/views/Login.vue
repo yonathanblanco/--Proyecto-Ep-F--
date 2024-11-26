@@ -45,12 +45,6 @@
               </q-input>
 
               <!-- Mostrar Documento y Email solo si es consultor -->
-              <q-input v-if="isRole('consultor')" dense label-color="green-7" color="#38803a" outlined
-                class="q-mt-md input" v-model="documento" label="Documento">
-                <template v-slot:prepend>
-                  <q-icon name="assignment" color="green-8" />
-                </template>
-              </q-input>
 
               <q-input v-if="isRole('consultor')" dense label-color="green-7" color="#38803a" outlined
                 class="q-mt-xs input" v-model="email" :error="!!emailError" :error-message="emailError" label="Email">
@@ -58,6 +52,15 @@
                   <q-icon name="mail" color="green-8" />
                 </template>
               </q-input>
+
+              <q-input v-if="isRole('consultor')" dense label-color="green-7" color="#38803a" outlined
+                class="q-mt-md input" v-model="numDocument" label="Documento">
+                <template v-slot:prepend>
+                  <q-icon name="assignment" color="green-8" />
+                </template>
+              </q-input>
+
+              
             </q-card-section>
 
             <!-- Botón de Login -->
@@ -105,7 +108,7 @@ const $router = useRouter();
 
 const email = ref("");
 const password = ref("");
-const documento = ref("");
+const numDocument = ref("");
 const role = ref("");
 const passwordVisible = ref(false);
 const loading = ref(false)
@@ -127,7 +130,7 @@ const validateForm = () => {
     return false;
   }
 
-  if (isRole('consultor') && (!email.value || !documento.value)) {
+  if (isRole('consultor') && (!email.value || !numDocument.value)) {
     notifyErrorRequest("Por favor, completa todos los campos obligatorios.");
     return false;
   }
@@ -156,16 +159,13 @@ async function loginAdmin(email, password, role) {
   }
 }
 
-async function loginInstructor(email, password,
-
-
-) {
+async function loginInstructor(email, password ) {
   try {
     const res = await postRepforaData("/instructors/login", { email, password, role });
 
     // Guarda el token en Pinia
     useAuth.setToken(res.token);
-    useAuth.setToken(role);
+    
     // Guarda el email y rol en Pinia
     useAuth.setUserDetails({ email: res.email, role: 'INSTRUCTOR' });
     // Almacena el token en localStorage
@@ -179,11 +179,18 @@ async function loginInstructor(email, password,
   }
 }
 
-async function loginConsultor(email, documento) {
+async function loginConsultor(email, numDocument) {
   try {
-    const res = await postRepforaData("aprendiz/login", { email, documento });
+    const res = await postData("apprentice/login", { email, numDocument });
+     // Guarda el token en Pinia
+     useAuth.setToken(res.token);
+    
+    // Guarda el email y rol en Pinia
+    useAuth.setUserDetails({ email: res.email, role: 'CONSULTOR' });
+    // Almacena el token en localStorage
+    localStorage.setItem('auth', JSON.stringify({ token: res.token }));
     notifySuccessRequest("Inicio de sesión exitoso");
-    $router.push("/home");
+    $router.push("/consultant");
   } catch (error) {
     notifyErrorRequest("Documento/Email incorrecto");
   }
@@ -200,7 +207,7 @@ async function handleLogin() {
     } else if (isRole('Instructor')) {
       await loginInstructor(email.value, password.value);
     } else if (isRole('consultor')) {
-      await loginConsultor(email.value, documento.value);
+      await loginConsultor(email.value, numDocument.value);
     }
   } finally {
     loading.value = false; // Desactiva el loading después de la solicitud
