@@ -19,6 +19,7 @@ import BinnacleInstructor from '@/views/BinnacleInstructor.vue';
 import FollowupInstructor from '@/views/FollowupInstructor.vue';
 import Certification from '@/views/Certification.vue';
 import CertificationInstructor from '@/views/CertificationInstructor.vue';
+import MenuConsultant from '../layouts/menuConsultant.vue';
 
 //report y followup corregir 
 
@@ -43,8 +44,13 @@ const routes = [
             { path: '/certificationInstructor', component: CertificationInstructor, meta: { requiresAuth: true, role: 'INSTRUCTOR' } }
         ]
     },
+
+    {
+        path: '/menuConsultant', component: MenuConsultant, children: [
+            { path: '/consultant', component: Consultant, meta: { requiresAuth: true, role: 'CONSULTOR' } }
+        ]
+    },
     { path: '/', component: Login },
-    { path: '/consultant', component: Consultant, meta: { requiresAuth: true, role: 'CONSULTOR' } }
 ];
 
 const router = createRouter({
